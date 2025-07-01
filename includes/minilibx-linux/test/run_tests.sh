@@ -9,7 +9,7 @@ set -e
 BOLD="\033[1m"
 RESET="\033[0m"
 LIGHT_RED="\033[91m"
-LIGHT_GREEN="\033[92m"
+LIGHT_BLUE="\033[92m"
 LIGHT_CYAN="\033[96m"
 
 logging(){
@@ -17,7 +17,7 @@ logging(){
 	printf "${LIGHT_CYAN}${BOLD}run_tests${RESET} [%b] : %b\n" "$type" "$*"
 }
 log_info(){
-	logging "${LIGHT_GREEN}info${RESET}" "$@"
+	logging "${LIGHT_BLUE}info${RESET}" "$@"
 }
 log_error(){
 	logging "${LIGHT_RED}error${RESET}" "$@" >&2
