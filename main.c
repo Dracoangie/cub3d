@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:19:02 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/07/10 19:47:55 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/07/10 21:00:31 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,19 @@ void init_data(t_data *data, char **av)
 	data->player.x = 0;
 	data->player.y = 0;
 	data->map.map = av;
+	int i = 0;
+	int j = 0;
+	while (data->map.map[i])
+	{
+		while (data->map.map[i][j])
+		{
+			printf("%c", data->map.map[i][j]);
+			j++;
+		}
+		printf("\n");
+		j = 0;
+		i++;
+	}
 	data->map.rows = 0;
 	data->map.cols = 0;
 	while (data->map.map[data->map.rows])
@@ -85,43 +98,6 @@ void render_rect(t_data *data, int x, int y, int height, int width, int color)
 		i++;
 	}
 }
-/*
-11111
-10001
-10011
-11001
-11101
-11111
-*/
-
-void map(t_data *data, char **get_map, int rows, int cols)
-{
-	int i = 0;
-	int j = 0;
-	// int x = 0;
-	// int y = 0;
-	(void)data;
-	(void)get_map;
-
-	while (i < rows)
-	{
-		printf("i: %i\n", get_map[i][j]);
-		while (j < cols)
-		{
-			// printf("j: %i", j);
-			// if (get_map[i][j] == '1')
-			// 	render_rect(data, x, y, 20, 20, BLACK);
-			// else if (get_map[i][j] == '0')
-			// 	render_rect(data, x, y, 20, 20, WHITE);
-			// x += 20;
-			j++;
-		}
-		// x = 0;
-		// y += 20;
-		j = 0;
-		i++;
-	}
-}
 
 void draw(t_data *data)
 {
@@ -131,12 +107,12 @@ void draw(t_data *data)
 	int y = 0;
 	while (i < data->map.rows)
 	{
-		printf("i: %c\n", data->map.map[i][j]);
+		//printf("i: %c\n", data->map.map[i][j]);
 		while (j < data->map.cols)
 		{
-			printf("j: %i", j);
+			//printf("j: %i", j);
 			if (data->map.map[i][j] == '1')
-				render_rect(data, x, y, 20, 20, BLACK);
+				render_rect(data, x, y, 20, 20, GREEN);
 			else if (data->map.map[i][j] == '0')
 				render_rect(data, x, y, 20, 20, WHITE);
 			else
