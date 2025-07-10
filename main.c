@@ -5,122 +5,164 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 18:24:36 by angnavar          #+#    #+#             */
-/*   Updated: 2025/06/30 21:04:22 by angnavar         ###   ########.fr       */
+/*   Created: 2025/07/01 17:19:02 by kpineda-          #+#    #+#             */
+/*   Updated: 2025/07/10 19:47:55 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	mouse_hook(int button, int x, int y, t_data *data)
-{
-	(void)button;
-	(void)x;
-	(void)y;
-	(void)data;
-	return (0);
-}
+void draw(t_data *data);
 
-void	exit_program(t_data *data)
+void exit_program(t_data *data)
 {
-	if (data->img.img_ptr)
-		mlx_destroy_image(data->mlx, data->img.img_ptr);
-	if (data->win)
-		mlx_destroy_window(data->mlx, data->win);
-	if (data->mlx)
-	{
-		mlx_destroy_display(data->mlx);
-		free(data->mlx);
-	}
+	(void)data;
+	mlx_destroy_image(data->mlx, data->img.img_ptr);
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
 	exit(0);
 }
 
-void	set_data(t_data *data)
+void key_hook(int key, t_data *data)
+{
+	if (key == XK_Escape)
+		exit_program(data);
+	if (key == XK_s)
+		data->player.y += 20;
+	if (key == XK_w)
+		data->player.y -= 20;
+	if (key == XK_a)
+		data->player.x -= 20;
+	if (key == XK_d)
+		data->player.x += 20;
+	draw(data);
+}
+
+void init_data(t_data *data, char **av)
 {
 	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "cub3d");
 	data->img.img_ptr = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	data->img.img_pixels_ptr = mlx_get_data_addr(data->img.img_ptr,
-			&data->img.bits_per_pixel,
-			&data->img.line_len,
-			&data->img.endian);
-}
-
-int	handle_input(int keysym, t_data *data)
-{
-	//float	move_step;
-
-	if (keysym == XK_Escape)
-		exit_program(data);
-	/*else if (keysym == XK_w || keysym == XK_Up)
-		data->move_y -= move_step;
-	else if (keysym == XK_s || keysym == XK_Down)
-		data->move_y += move_step;
-	else if (keysym == XK_a || keysym == XK_Left)
-		data->move_x -= move_step;
-	else if (keysym == XK_d || keysym == XK_Right)
-		data->move_x += move_step;*/
-	return (0);
-}
-
-void	img_pix_put(t_img *img, int x, int y, int color)
-{
-	char    *pixel;
-	int		i;
-
-	i = img->bits_per_pixel - 8;
-    pixel = img->img_pixels_ptr + (y * img->line_len + x * (img->bits_per_pixel / 8));
-	while (i >= 0)
+												 &data->img.bits_per_pixel, &data->img.line_len, &data->img.endian);
+	data->player.x = 0;
+	data->player.y = 0;
+	data->map.map = av;
+	data->map.rows = 0;
+	data->map.cols = 0;
+	while (data->map.map[data->map.rows])
 	{
-		if (img->endian != 0)
-			*pixel++ = (color >> i) & 0xFF;
-		else
-			*pixel++ = (color >> (img->bits_per_pixel - 8 - i)) & 0xFF;
-		i -= 8;
+		if (data->map.cols < (int)ft_strlen(data->map.map[data->map.rows]))
+			data->map.cols = (int)ft_strlen(data->map.map[data->map.rows]);
+		data->map.rows++;
+	}
+	printf("rows: %i\n", data->map.rows);
+	printf("cols: %i\n", data->map.cols);
+}
+
+void put_pixel(t_data *data, int x, int y, int color)
+{
+	char *pixel;
+
+	pixel = data->img.img_pixels_ptr + (x * 4) + (y * data->img.line_len);
+	*(int *)pixel = color;
+}
+
+void render_rect(t_data *data, int x, int y, int height, int width, int color)
+{
+	int i = 0;
+	int j = 0;
+
+	while (i < width)
+	{
+		while (j < height)
+		{
+			put_pixel(data, i + x, j + y, color);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+/*
+11111
+10001
+10011
+11001
+11101
+11111
+*/
+
+void map(t_data *data, char **get_map, int rows, int cols)
+{
+	int i = 0;
+	int j = 0;
+	// int x = 0;
+	// int y = 0;
+	(void)data;
+	(void)get_map;
+
+	while (i < rows)
+	{
+		printf("i: %i\n", get_map[i][j]);
+		while (j < cols)
+		{
+			// printf("j: %i", j);
+			// if (get_map[i][j] == '1')
+			// 	render_rect(data, x, y, 20, 20, BLACK);
+			// else if (get_map[i][j] == '0')
+			// 	render_rect(data, x, y, 20, 20, WHITE);
+			// x += 20;
+			j++;
+		}
+		// x = 0;
+		// y += 20;
+		j = 0;
+		i++;
 	}
 }
 
-int render_rect(t_img *img, t_rect rect)
+void draw(t_data *data)
 {
-	int	i;
-	int j;
-
-	i = rect.y;
-	while (i < rect.y + rect.height)
+	int	i = 0;
+	int	j = 0;
+	int x = 0;
+	int y = 0;
+	while (i < data->map.rows)
 	{
-		j = rect.x;
-		while (j < rect.x + rect.width)
-			img_pix_put(img, j++, i, rect.color);
-		++i;
+		printf("i: %c\n", data->map.map[i][j]);
+		while (j < data->map.cols)
+		{
+			printf("j: %i", j);
+			if (data->map.map[i][j] == '1')
+				render_rect(data, x, y, 20, 20, BLACK);
+			else if (data->map.map[i][j] == '0')
+				render_rect(data, x, y, 20, 20, WHITE);
+			else
+				render_rect(data, x, y, 20, 20, BLACK);
+			x += 20;
+			j++;
+		}
+		x = 0;
+		y += 20;
+		j = 0;
+		i++;
 	}
-	return (0);
-}
-
-int	draw(t_data *data)
-{
-	if (data->win == NULL)
-		return (1);
-	render_rect(&data->img, (t_rect){200, 200, 100, 100, RED});
-
+	mlx_clear_window(data->mlx, data->win);
+	render_rect(data, data->player.x, data->player.y, 20, 20, WHITE);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img_ptr, 0, 0);
-
-	return (0);
 }
 
-int	main(int argc, char **argv)
+int main(int ac, char **av)
 {
-	t_data	data;
-	(void )argv;
-	
-	if(argc > 2)
-		return (0);
+	t_data data;
+	(void)ac;
+	av++; 
 
-	
-	set_data(&data);
+	init_data(&data, av);
 	draw(&data);
-	mlx_mouse_hook(data.win, mouse_hook, &data);
-	mlx_key_hook(data.win, handle_input, &data);
 	mlx_hook(data.win, DestroyNotify, NoEventMask, (void *)exit_program, &data);
+	mlx_key_hook(data.win, (void *)key_hook, &data);
 	mlx_loop(data.mlx);
-	return (0);
 }
