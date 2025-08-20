@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:41:39 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/11 16:55:25 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/19 23:16:16 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,21 @@ void ft_free_matrix(char **matrix)
 		i++;
 	}
 	free(matrix);
+}
+
+int	ft_strcmp(const char *s1, char **s2, size_t n, int i, int j)
+{
+	size_t	k;
+
+	k = 0;
+	while (k < n)
+	{
+		if (s1[k] == '\0')
+			return (1) ;
+		if (s1[k] != s2[i][j])
+			return (0);
+		j++;
+		k++;
+	}
+	return (1);
 }

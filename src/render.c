@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/16 18:40:24 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/19 19:47:43 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ void draw(t_data *data)
 	render_circle(data, data->player.x, data->player.y, data->player.scale);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img_ptr, 0, 0);
 }
+
 void put_pixel(t_data *data, int x, int y, int color)
 {
 	char *pixel;

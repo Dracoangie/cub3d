@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:16:53 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/05 13:51:38 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/19 19:47:05 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,33 +104,3 @@ char	*get_next_line(int fd)
 		return (NULL);
 	return (set_buffer(fd, &buffer, buffer_read));
 }
-
-/*
-int main()
-{
-    int fd;
-    //int fd1;
-    char *line;
-
-    fd = open("../pruebas/empty.txt", O_RDONLY);
-    //fd = open("../pruebas/variable_nls.txt", O_RDONLY);
-    //fd = open("../pruebas/read_error.txt", O_RDONLY);
-    //fd = open("../pruebas/only_nl.txt", O_RDONLY);
-    //fd = open("../pruebas/one_line_no_nl.txt", O_RDONLY);
-    //fd = open("../pruebas/multiple_nl.txt", O_RDONLY);
-    //fd = open("../pruebas/giant_line_nl.txt", O_RDONLY);
-    //fd = open("../pruebas/prueba.txt", O_RDONLY);
-    //fd1 = open("../pruebas/variable_nls.txt", O_RDONLY);
-    //fd = open("../pruebas/lines_around_10.txt", O_RDONLY);
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-        //line = get_next_line(fd1);
-        //printf("%s", line);
-        //free(line);
-    }
-    close(fd);
-    //close(fd1);
-    return 0;
-}*/

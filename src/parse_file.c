@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/16 18:34:20 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/20 01:43:52 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,70 @@ int set_player(t_data *data, int i)
 	}
 	return (hasOne);
 }
+int check_coords(t_data *data, t_point *point, char *str, char coor, char post_coor)
+{
+	while (data->file.file[point->x][0] == '\n')
+			point->x++;
+	if (data->file.file[point->x][0] == coor && (data->file.file[point->x][1] == post_coor || data->file.file[point->x][1] == ' '))
+	{
+		int n = 0;
+		while (data->file.file[point->x][point->y] == ' ' || data->file.file[point->x][point->y] == post_coor)
+			point->y++;
+		n = (ft_strlen(data->file.file[point->x]) - point->y);
+		if (!ft_strcmp(str, data->file.file, n, point->x, point->y))
+			return (0);
+		if (ft_strcmp(str, data->file.file, n, point->x, point->y))
+		{
+			point->x++;
+			point->y = 1;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int	check_floor_ceiling(t_data *data, t_point *point, char c)
+{
+	while (data->file.file[point->x][0] == '\n')
+			point->x++;
+	if (data->file.file[point->x][0] == c && data->file.file[point->x][1] == ' ')
+	{
+		while (data->file.file[point->x][point->y] == ' ' || data->file.file[point->x][point->y] == post_coor)
+			point->y++;
+		n = (ft_strlen(data->file.file[point->x]) - point->y);
+		if (!ft_strcmp(str, data->file.file, n, point->x, point->y))
+			return (0);
+		if (ft_strcmp(str, data->file.file, n, point->x, point->y))
+		{
+			point->x++;
+			point->y = 1;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int parse_file_textures(t_data *data)
+{
+	t_point point;
+	point.x = 0;
+	point.y = 1;
+
+	point = (t_point){0, 1};
+	while (data->file.file[point.x])
+	{
+		if (!check_coords(data, &point, "./path_to_the_north_texture", 'N', 'O'))
+			return (0);
+		if (!check_coords(data, &point, "./path_to_the_south_texture", 'S', 'O'))
+			return (0);
+		if (!check_coords(data, &point, "./path_to_the_west_texture", 'W', 'E'))
+			return (0);
+		if (!check_coords(data, &point, "./path_to_the_east_texture", 'E', 'A'))
+			return (0);
+		return (1);
+	}
+	return (1);
+}
 
 int clean_matrix(t_data *data, int i)
 {
@@ -86,6 +150,8 @@ int clean_matrix(t_data *data, int i)
 
 int set_map(t_data *data)
 {
+	if (!parse_file_textures(data))
+		return (data->map.map = NULL, 0);
 	if (!clean_matrix(data, parse_coords(data)))
 		return (0);
 	data->map.rows = 0;

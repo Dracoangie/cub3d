@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/16 17:49:07 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/20 01:29:04 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int ft_chrcmp(char *str, char *str2);
 void ft_free_matrix(char **matrix);
 void ft_dup_matrix(char **cpy, char **dest);
 double ft_degree_to_radian(double degrees);
+int	ft_strcmp(const char *s1, char **s2, size_t n, int i, int j);
 
 // render
 void render_rect(t_data *data, int x, int y, int height, int width, int color);
@@ -106,6 +107,7 @@ void put_pixel(t_data *data, int x, int y, int color);
 // parse_file
 int read_file(t_data *data, char *name);
 int set_map(t_data *data);
+int parse_file_textures(t_data *data);
 
 // parse map
 int check_around(int i, int j, t_data *data);
