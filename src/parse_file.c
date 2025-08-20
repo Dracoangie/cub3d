@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/20 01:43:52 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/20 15:02:28 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,24 @@ int check_coords(t_data *data, t_point *point, char *str, char coor, char post_c
 
 int	check_floor_ceiling(t_data *data, t_point *point, char c)
 {
+	int	len = 0;
 	while (data->file.file[point->x][0] == '\n')
 			point->x++;
 	if (data->file.file[point->x][0] == c && data->file.file[point->x][1] == ' ')
 	{
-		while (data->file.file[point->x][point->y] == ' ' || data->file.file[point->x][point->y] == post_coor)
+		while (data->file.file[point->x][point->y] == ' ')
 			point->y++;
-		n = (ft_strlen(data->file.file[point->x]) - point->y);
+		if (data->file.file[point->x][point->y] == ',')
+		{
+			point->y++;
+			while (data->file.file[point->x][point->y] != ',' || data->file.file[point->x][point->y] != '\n')
+				len++;
+		}
 		if (!ft_strcmp(str, data->file.file, n, point->x, point->y))
 			return (0);
 		if (ft_strcmp(str, data->file.file, n, point->x, point->y))
 		{
+			
 			point->x++;
 			point->y = 1;
 			return (1);
