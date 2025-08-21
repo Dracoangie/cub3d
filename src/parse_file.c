@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/20 15:02:28 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/21 20:30:02 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int set_player(t_data *data, int i)
 int check_coords(t_data *data, t_point *point, char *str, char coor, char post_coor)
 {
 	while (data->file.file[point->x][0] == '\n')
-			point->x++;
+		point->x++;
 	if (data->file.file[point->x][0] == coor && (data->file.file[point->x][1] == post_coor || data->file.file[point->x][1] == ' '))
 	{
 		int n = 0;
@@ -78,33 +78,75 @@ int check_coords(t_data *data, t_point *point, char *str, char coor, char post_c
 	}
 	return (0);
 }
-
-int	check_floor_ceiling(t_data *data, t_point *point, char c)
+int alpha(char *str)
 {
-	int	len = 0;
-	while (data->file.file[point->x][0] == '\n')
-			point->x++;
-	if (data->file.file[point->x][0] == c && data->file.file[point->x][1] == ' ')
+	while (*str)
 	{
-		while (data->file.file[point->x][point->y] == ' ')
-			point->y++;
-		if (data->file.file[point->x][point->y] == ',')
-		{
-			point->y++;
-			while (data->file.file[point->x][point->y] != ',' || data->file.file[point->x][point->y] != '\n')
-				len++;
-		}
-		if (!ft_strcmp(str, data->file.file, n, point->x, point->y))
+		while (*str == ' ')
+			str++;
+		while (*str >= '0' && *str <= '9')
+			str++;
+		if (ft_isalpha(*str))
 			return (0);
-		if (ft_strcmp(str, data->file.file, n, point->x, point->y))
-		{
-			
-			point->x++;
-			point->y = 1;
-			return (1);
-		}
 	}
-	return (0);
+	if (*str != '\0')
+		free(str);
+	return (1);
+}
+
+int coma_case(t_data *data, t_point *point, int len)
+{
+	if (data->file.file[point->x][point->y] == ',')
+	{
+		point->y++;
+		while (data->file.file[point->x][point->y] != ',')
+		{
+			len++;
+			point->y++;
+		}
+		int g = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
+		if (g < 0 || g > 255)
+			return (0);
+		len = 0;
+		if (data->file.file[point->x][point->y] == ',')
+			point->y++;
+		while (data->file.file[point->x][point->y] != '\n')
+		{
+			len++;
+			point->y++;
+		}
+		int b = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
+		if (b < 0 || b > 255)
+			return (0);
+	}
+	return (1);
+}
+
+int check_floor_ceiling(t_data *data, t_point *point, char c)
+{
+	int len = 0;
+	while (data->file.file[point->x][0] == '\n')
+		point->x++;
+	if (data->file.file[point->x][0] != c || data->file.file[point->x][1] != ' ')
+		return (1);
+	while (data->file.file[point->x][point->y] == ' ')
+		point->y++;
+	while (data->file.file[point->x][point->y] != ',')
+	{
+		len++;
+		point->y++;
+	}
+	char *r = ft_substr(data->file.file[point->x], point->y - len, len);
+	if (!alpha(r))
+		return (0);
+	r = ft_substr(data->file.file[point->x], point->y - len, len);
+	int p = ft_atoi(r);
+	if (p < 0 || p > 255)
+		return (0);
+	len = 0;
+	if (!coma_case(data, point, len))
+		return (0);
+	return (point->x++, point->y = 1, 1);
 }
 
 int parse_file_textures(t_data *data)
@@ -114,18 +156,18 @@ int parse_file_textures(t_data *data)
 	point.y = 1;
 
 	point = (t_point){0, 1};
-	while (data->file.file[point.x])
-	{
-		if (!check_coords(data, &point, "./path_to_the_north_texture", 'N', 'O'))
-			return (0);
-		if (!check_coords(data, &point, "./path_to_the_south_texture", 'S', 'O'))
-			return (0);
-		if (!check_coords(data, &point, "./path_to_the_west_texture", 'W', 'E'))
-			return (0);
-		if (!check_coords(data, &point, "./path_to_the_east_texture", 'E', 'A'))
-			return (0);
-		return (1);
-	}
+	if (!check_coords(data, &point, "./path_to_the_north_texture", 'N', 'O'))
+		return (0);
+	if (!check_coords(data, &point, "./path_to_the_south_texture", 'S', 'O'))
+		return (0);
+	if (!check_coords(data, &point, "./path_to_the_west_texture", 'W', 'E'))
+		return (0);
+	if (!check_coords(data, &point, "./path_to_the_east_texture", 'E', 'A'))
+		return (0);
+	if (!check_floor_ceiling(data, &point, 'F'))
+		return (0);
+	if (!check_floor_ceiling(data, &point, 'C'))
+		return (0);
 	return (1);
 }
 
