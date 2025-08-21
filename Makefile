@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+         #
+#    By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 21:53:56 by angnavar          #+#    #+#              #
-#    Updated: 2025/08/12 09:27:43 by kpineda-         ###   ########.fr        #
+#    Updated: 2025/08/19 20:57:37 by tu_nombre_d      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ MINILIBX_DIR = includes/minilibx-linux
 LIBFT = $(LIBFT_DIR)/libft.a
 MINILIBX = $(MINILIBX_DIR)/libmlx.a
 
-SRC = src/gnl_utils.c src/gnl.c src/utils.c src/main.c src/render.c src/parse_file.c src/exit.c src/parse_map.c
+SRC = src/gnl_utils.c src/gnl.c src/utils.c src/main.c src/render.c src/parse_file.c src/exit.c src/parse_map.c \
+		src/collisions.c
 OBJ_DIR = obj
 OBJ = $(SRC:.c=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))

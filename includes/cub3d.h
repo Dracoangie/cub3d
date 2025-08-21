@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/20 01:29:04 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/21 22:22:04 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,12 @@ typedef struct s_point
 	int y;
 } t_point;
 
+typedef struct s_line
+{
+	t_point start;
+	t_point end;
+} t_line;
+
 typedef struct s_rect
 {
 	int x;
@@ -91,6 +97,12 @@ typedef struct s_rect
 	int height;
 	int color;
 } t_rect;
+
+// collisions
+int col_squaresquare(t_rect rect, t_rect rect2);
+int col_squareline(t_rect rect, t_line line, t_point* intersection, t_data *data);
+int col_lineLine(t_point point1, t_point point2, t_point point3, t_point point4, t_point* intersection);
+
 
 // utils
 int ft_chrcmp(char *str, char *str2);

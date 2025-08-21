@@ -1,0 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   collisions.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/19 20:28:38 by tu_nombre_d       #+#    #+#             */
+/*   Updated: 2025/08/20 01:31:43 by tu_nombre_d      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int col_squaresquare(t_rect rect, t_rect rect2)
+{
+	int hit = 0;
+
+	if (rect.x < rect2.x + rect2.width && rect.x + rect.width > rect2.x &&
+		rect.y < rect2.y + rect2.height && rect.y + rect.height > rect2.y)
+		hit = 1;
+    return (hit);
+}
+
+int col_squareline(t_rect rect, t_line line, t_point* inter, t_data *data)
+{
+    int hit = 0;
+    double closedist = 20000000;
+    t_point iaux;
+	int i = -1;
+
+    t_point r[4] = { {rect.x, rect.y}, {rect.x + rect.width, rect.y},
+        {rect.x + rect.width, rect.y + rect.height},
+        {rect.x, rect.y + rect.height}
+    };
+    while (++i < 4)
+	{
+        if (col_lineLine(line.start, line.end, r[i], r[(i+1)%4], &iaux))
+		{
+            hit = 1;
+            double auxdist = pow(iaux.x - data->player.x, 2) + pow(iaux.y - data->player.y, 2);
+            if (auxdist < closedist)
+                *inter = iaux;
+            if (auxdist < closedist)
+                closedist = auxdist;
+        }
+    }
+    return (hit);
+}
+
+int col_lineLine(t_point point1, t_point point2, t_point point3, t_point point4, t_point* intersection)
+{
+	double div = (double)((point4.y-point3.y)*(point2.x-point1.x) - (point4.x-point3.x)*(point2.y-point1.y));
+	if (div == 0.0)
+		return 0;
+	double uA = ((point4.x-point3.x)*(point1.y-point3.y) - (point4.y-point3.y)*(point1.x-point3.x)) / div;
+	double uB = ((point2.x-point1.x)*(point1.y-point3.y) - (point2.y-point1.y)*(point1.x-point3.x)) / div;
+
+	if (uA >= 0.0 && uA <= 1.0 && uB >= 0.0 && uB <= 1.0)
+	{
+		intersection->x = (int)(point1.x + uA * (point2.x - point1.x));
+		intersection->y = (int)(point1.y + uA * (point2.y - point1.y));
+		return (1);
+	}
+  return (0);
+}

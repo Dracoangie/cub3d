@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/16 18:16:30 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/21 22:23:01 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,24 @@ void draw(t_data *data);
 
 void player_move(t_data *data, int dir, int speed)
 {
+	int y = data->player.y + (int)(cos(ft_degree_to_radian(data->player.rotation + dir)) * speed);
+	int x = data->player.x + (int)(sin(ft_degree_to_radian(data->player.rotation + dir)) * speed);
+	int i = 0;
+	int j;
+	while(data->map.map[i])
+	{
+		j = 0;
+		while(data->map.map[i][j])
+		{
+			if (data->map.map[i][j] == '1')
+			{
+				if(col_squaresquare((t_rect){x, y, data->player.scale *2, data->player.scale *2, BLACK}, (t_rect){j * 20, i * 20, 20, 20, BLACK}))
+					return;
+			}
+			j++;
+		}
+		i++;
+	}
 	data->player.y += (int)(cos(ft_degree_to_radian(data->player.rotation + dir)) * speed);
 	data->player.x += (int)(sin(ft_degree_to_radian(data->player.rotation + dir)) * speed);
 }
@@ -34,7 +52,7 @@ void key_hook(int key, t_data *data)
 		player_move(data, 90, speed);
 	else if (key == XK_d)
 		player_move(data, 270, speed);
-	else if (key == XK_Right)
+	if (key == XK_Right)
 		data->player.rotation -= speed;
 	else if (key == XK_Left)
 		data->player.rotation += speed;
@@ -52,7 +70,7 @@ void init_data(t_data *data, char **av)
 		exit_error(data);
 	if (!set_map(data))
 		exit_error(data);
-	data->player.scale = 8;
+	data->player.scale = 5;
 }
 
 int main(int ac, char **av)
