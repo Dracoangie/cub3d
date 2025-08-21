@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/21 22:23:01 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/08/21 22:55:15 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ void key_hook(int key, t_data *data)
 	else if (key == XK_w)
 		player_move(data, 0, speed);
 	else if (key == XK_a)
-		player_move(data, 90, speed);
-	else if (key == XK_d)
 		player_move(data, 270, speed);
+	else if (key == XK_d)
+		player_move(data, 90, speed);
 	if (key == XK_Right)
-		data->player.rotation -= speed;
-	else if (key == XK_Left)
 		data->player.rotation += speed;
+	else if (key == XK_Left)
+		data->player.rotation -= speed;
 	draw(data);
 }
 

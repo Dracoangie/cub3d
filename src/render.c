@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/21 22:21:32 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/08/21 23:15:50 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,40 @@ static inline double clamp(double value, double min_value, double max_value)
     return value;
 }
 
-
-void render_3d_column(t_data *data, t_point intersection, double ray_angle, int col)
+void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 {
-    double raw = hypot((double)intersection.x - (double)data->player.x , 
-				(double)intersection.y - (double)data->player.y );
-    double perp = raw * cos(ray_angle - ft_degree_to_radian(data->player.rotation));
+    double player_pos[2] = { data->player.x + data->player.scale,
+                             data->player.y + data->player.scale };
 
-    double proj_plane = (double)WIDTH / 2.0 / tan(3.1415/3 / 2.0);
-    int wall_h = (int)(((double)20 * proj_plane) / perp + 0.5);
-    int ytop = (int)clamp(HEIGHT / 2 - wall_h / 2, 0, HEIGHT - 1);
-    int ybot = (int)clamp(HEIGHT / 2 + wall_h / 2, 0, HEIGHT - 1);
-    if (ytop > 0)
-        render_line(data, (t_point){col, 0}, (t_point){col, ytop-1}, WHITE);
-    render_line(data, (t_point){col, ytop}, (t_point){col, ybot}, GRAY);
-    if (ybot < HEIGHT - 1)
-        render_line(data, (t_point){col, ybot+1}, (t_point){col, HEIGHT - 1}, BLACK);
+    double distance_to_wall = hypot(hit.x - player_pos[0], hit.y - player_pos[1]);
+
+    double ray_dir[2] = { sin(ray_angle), cos(ray_angle) };
+    double player_dir[2] = { sin(ft_degree_to_radian(data->player.rotation)),
+		 cos(ft_degree_to_radian(data->player.rotation)) };
+
+    double cos_angle_difference = ray_dir[0]*player_dir[0] + ray_dir[1]*player_dir[1];
+    if (cos_angle_difference < 0.0001) 
+		cos_angle_difference = 0.0001;
+	
+    double projection_plane = (double)WIDTH / (2.0 * tan(3.1415 / 6.0));
+    int wall_height = (int)((20.0 * projection_plane) / (distance_to_wall * cos_angle_difference) + 0.5);
+
+    int wall_y[2] = {
+        (int)clamp(HEIGHT/2 - wall_height/2, 0, HEIGHT-1),
+        (int)clamp(HEIGHT/2 + wall_height/2, 0, HEIGHT-1)
+    };
+
+    if (wall_y[0] > 0)
+        render_line(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, WHITE);
+    if (hit.x % 20 == 0)
+		render_line(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, DARK_GRAY);
+	else
+		render_line(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
+
+    if (wall_y[1] < HEIGHT-1)
+        render_line(data, (t_point){col, wall_y[1]+1}, (t_point){col, HEIGHT-1}, BLACK);
 }
+
 
 void render_2d_vision(t_data *data)
 {

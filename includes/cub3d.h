@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/21 22:22:04 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/08/21 23:12:07 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
 #define BLACK 0x000000
-#define GRAY 0x808080
+#define GRAY 0x404040
+#define DARK_GRAY 0x808080
 #define WHITE 0xFFFFFF
 #define CYAN 0x007080
 
