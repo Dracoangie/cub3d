@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/21 20:30:02 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/22 10:16:46 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int alpha(char *str)
 	return (1);
 }
 
-int coma_case(t_data *data, t_point *point, int len)
+int coma_case(t_data *data, t_point *point, t_colors *colors, int len)
 {
 	if (data->file.file[point->x][point->y] == ',')
 	{
@@ -104,8 +104,8 @@ int coma_case(t_data *data, t_point *point, int len)
 			len++;
 			point->y++;
 		}
-		int g = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
-		if (g < 0 || g > 255)
+		colors->green = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
+		if (colors->green < 0 || colors->green > 255)
 			return (0);
 		len = 0;
 		if (data->file.file[point->x][point->y] == ',')
@@ -115,14 +115,14 @@ int coma_case(t_data *data, t_point *point, int len)
 			len++;
 			point->y++;
 		}
-		int b = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
-		if (b < 0 || b > 255)
+		colors->blue = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
+		if (colors->blue < 0 || colors->blue > 255)
 			return (0);
 	}
 	return (1);
 }
 
-int check_floor_ceiling(t_data *data, t_point *point, char c)
+int check_floor_ceiling(t_data *data, t_point *point, t_colors *colors, char c)
 {
 	int len = 0;
 	while (data->file.file[point->x][0] == '\n')
@@ -140,11 +140,11 @@ int check_floor_ceiling(t_data *data, t_point *point, char c)
 	if (!alpha(r))
 		return (0);
 	r = ft_substr(data->file.file[point->x], point->y - len, len);
-	int p = ft_atoi(r);
-	if (p < 0 || p > 255)
+	colors->red = ft_atoi(r);
+	if (colors->red < 0 || colors->red > 255)
 		return (0);
 	len = 0;
-	if (!coma_case(data, point, len))
+	if (!coma_case(data, point, colors, len))
 		return (0);
 	return (point->x++, point->y = 1, 1);
 }
@@ -152,6 +152,7 @@ int check_floor_ceiling(t_data *data, t_point *point, char c)
 int parse_file_textures(t_data *data)
 {
 	t_point point;
+	t_colors colors;
 	point.x = 0;
 	point.y = 1;
 
@@ -164,9 +165,9 @@ int parse_file_textures(t_data *data)
 		return (0);
 	if (!check_coords(data, &point, "./path_to_the_east_texture", 'E', 'A'))
 		return (0);
-	if (!check_floor_ceiling(data, &point, 'F'))
+	if (!check_floor_ceiling(data, &point, &colors, 'F'))
 		return (0);
-	if (!check_floor_ceiling(data, &point, 'C'))
+	if (!check_floor_ceiling(data, &point, &colors, 'C'))
 		return (0);
 	return (1);
 }

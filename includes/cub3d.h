@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/21 23:12:07 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/08/22 10:02:57 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,14 @@ typedef struct s_rect
 	int height;
 	int color;
 } t_rect;
+
+typedef struct	s_colors
+{
+	int	red;
+	int	green;
+	int	blue;
+	
+}	t_colors;
 
 // collisions
 int col_squaresquare(t_rect rect, t_rect rect2);
