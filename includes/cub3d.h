@@ -6,7 +6,7 @@
 /*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/22 10:02:57 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:11:29 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ typedef struct s_file
 	char **file;
 } t_file;
 
+typedef struct s_color
+{
+	int red;
+	int green;
+	int blue;
+} t_color;
+
 typedef struct s_data
 {
 	void *mlx;
@@ -76,6 +83,7 @@ typedef struct s_data
 	t_map map;
 	t_player player;
 	t_file file;
+	t_color color[2];
 } t_data;
 
 typedef struct s_point
@@ -99,26 +107,17 @@ typedef struct s_rect
 	int color;
 } t_rect;
 
-typedef struct	s_colors
-{
-	int	red;
-	int	green;
-	int	blue;
-	
-}	t_colors;
-
 // collisions
 int col_squaresquare(t_rect rect, t_rect rect2);
-int col_squareline(t_rect rect, t_line line, t_point* intersection, t_data *data);
-int col_lineLine(t_point point1, t_point point2, t_point point3, t_point point4, t_point* intersection);
-
+int col_squareline(t_rect rect, t_line line, t_point *intersection, t_data *data);
+int col_lineLine(t_point point1, t_point point2, t_point point3, t_point point4, t_point *intersection);
 
 // utils
 int ft_chrcmp(char *str, char *str2);
 void ft_free_matrix(char **matrix);
 void ft_dup_matrix(char **cpy, char **dest);
 double ft_degree_to_radian(double degrees);
-int	ft_strcmp(const char *s1, char **s2, size_t n, int i, int j);
+int ft_strcmp(const char *s1, char **s2, size_t n, int i, int j);
 
 // render
 void render_rect(t_data *data, int x, int y, int height, int width, int color);
