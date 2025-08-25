@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:41:39 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/19 23:16:16 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/25 16:53:38 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,13 @@ int	ft_strcmp(const char *s1, char **s2, size_t n, int i, int j)
 		k++;
 	}
 	return (1);
+}
+
+double ft_clamp(double value, double min_value, double max_value)
+{
+    if (value < min_value)
+        return min_value;
+    if (value > max_value)
+        return max_value;
+    return value;
 }

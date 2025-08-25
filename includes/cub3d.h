@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/23 17:11:29 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:12:46 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #define BUFFER_SIZE 1000000
 #define WIDTH 800
 #define HEIGHT 800
+#define RGB(r,g,b)   (((r) << 16) | ((g) << 8) | (b))
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
@@ -118,8 +119,10 @@ void ft_free_matrix(char **matrix);
 void ft_dup_matrix(char **cpy, char **dest);
 double ft_degree_to_radian(double degrees);
 int ft_strcmp(const char *s1, char **s2, size_t n, int i, int j);
+double ft_clamp(double value, double min_value, double max_value);
 
 // render
+void render_vline(t_data *data, t_point begin, t_point end, int color);
 void render_rect(t_data *data, int x, int y, int height, int width, int color);
 void draw(t_data *data);
 void put_pixel(t_data *data, int x, int y, int color);

@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/21 23:15:50 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/08/25 18:09:58 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,35 @@
 double ft_degree_to_radian(double degrees)
 {
 	return (degrees * (3.1415 / 180.0));
+}
+
+void render_vline(t_data *data, t_point begin, t_point end, int color)
+{
+
+    int y0 = (int)(begin.y + 0.5);
+    int y1 = (int)(end.y + 0.5);
+    int x  = (int)(begin.x + 0.5);
+	int y = y0;
+
+    if (x < 0 || x >= WIDTH)
+		return;
+
+    if (y0 > y1)
+	{
+		int t = y0; y0 = y1; y1 = t;
+	}
+    if (y1 < 0 || y0 >= HEIGHT)
+		return;
+    if (y0 < 0)
+		y0 = 0;
+    if (y1 >= HEIGHT)
+		y1 = HEIGHT - 1;
+	y = y0;
+    while (y <= y1)
+    {
+        put_pixel(data, x, y, color);
+        ++y;
+    }
 }
 
 void render_line(t_data *data, t_point begin, t_point end, int color)
@@ -39,14 +68,6 @@ void render_line(t_data *data, t_point begin, t_point end, int color)
 	}
 }
 
-static inline double clamp(double value, double min_value, double max_value)
-{
-    if (value < min_value)
-        return min_value;
-    if (value > max_value)
-        return max_value;
-    return value;
-}
 
 void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 {
@@ -67,19 +88,19 @@ void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
     int wall_height = (int)((20.0 * projection_plane) / (distance_to_wall * cos_angle_difference) + 0.5);
 
     int wall_y[2] = {
-        (int)clamp(HEIGHT/2 - wall_height/2, 0, HEIGHT-1),
-        (int)clamp(HEIGHT/2 + wall_height/2, 0, HEIGHT-1)
+        (int)ft_clamp(HEIGHT/2 - wall_height/2, 0, HEIGHT-1),
+        (int)ft_clamp(HEIGHT/2 + wall_height/2, 0, HEIGHT-1)
     };
 
     if (wall_y[0] > 0)
-        render_line(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, WHITE);
+        render_vline(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, RGB(data->color[0].red, data->color[0].green, data->color[0].blue));
     if (hit.x % 20 == 0)
-		render_line(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, DARK_GRAY);
+		render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, DARK_GRAY);
 	else
-		render_line(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
+		render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
 
     if (wall_y[1] < HEIGHT-1)
-        render_line(data, (t_point){col, wall_y[1]+1}, (t_point){col, HEIGHT-1}, BLACK);
+        render_vline(data, (t_point){col, wall_y[1]+1}, (t_point){col, HEIGHT-1},  RGB(data->color[1].red, data->color[1].green, data->color[1].blue));
 }
 
 
