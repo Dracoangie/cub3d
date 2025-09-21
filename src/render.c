@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/25 18:09:58 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/21 12:58:59 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,9 @@ void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
     };
 
     if (wall_y[0] > 0)
-        render_vline(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, RGB(data->color[0].red, data->color[0].green, data->color[0].blue));
-    if (hit.x % 20 == 0)
-		render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, DARK_GRAY);
-	else
-		render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
-
+        {render_vline(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, RGB(data->color[0].red, data->color[0].green, data->color[0].blue));
+    }
+	render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
     if (wall_y[1] < HEIGHT-1)
         render_vline(data, (t_point){col, wall_y[1]+1}, (t_point){col, HEIGHT-1},  RGB(data->color[1].red, data->color[1].green, data->color[1].blue));
 }

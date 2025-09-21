@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/23 17:12:40 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/09/21 13:38:17 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,30 +96,31 @@ int alpha(char *str)
 
 int coma_case(t_data *data, t_point *point, int len, int i)
 {
-	if (data->file.file[point->x][point->y] == ',')
+	char *r;
+	if (data->file.file[point->x][point->y] != ',')
+		return (1);
+	point->y++;
+	while (data->file.file[point->x][point->y] != ',')
 	{
+		len++;
 		point->y++;
-		while (data->file.file[point->x][point->y] != ',')
-		{
-			len++;
-			point->y++;
-		}
-		data->color[i].green = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
-		if (data->color[i].green < 0 || data->color[i].green > 255)
-			return (0);
-		len = 0;
-		if (data->file.file[point->x][point->y] == ',')
-			point->y++;
-		while (data->file.file[point->x][point->y] != '\n')
-		{
-			len++;
-			point->y++;
-		}
-		data->color[i].blue = ft_atoi(ft_substr(data->file.file[point->x], point->y - len, len));
-		if (data->color[i].blue < 0 || data->color[i].blue > 255)
-			return (0);
 	}
-	return (1);
+	r = ft_substr(data->file.file[point->x], point->y - len, len);
+	data->color[i].green = ft_atoi(r);
+	free(r);
+	if (data->color[i].green < 0 || data->color[i].green > 255)
+		return (0);
+	if (data->file.file[point->x][point->y] == ',')
+		point->y++;
+	len = point->y;
+	while (data->file.file[point->x][point->y] != '\n')
+		point->y++;
+	len = point->y - len;
+	r = ft_substr(data->file.file[point->x], point->y - len, len);
+	data->color[i].blue = ft_atoi(r);
+	if (data->color[i].blue < 0 || data->color[i].blue > 255)
+		return (free(r), 0);
+	return (free(r), 1);
 }
 
 int check_floor_ceiling(t_data *data, t_point *point, char c, int i)
@@ -138,9 +139,11 @@ int check_floor_ceiling(t_data *data, t_point *point, char c, int i)
 	}
 	char *r = ft_substr(data->file.file[point->x], point->y - len, len);
 	if (!alpha(r))
-		return (0);
+		return (free(r), 0);
+	free(r);
 	r = ft_substr(data->file.file[point->x], point->y - len, len);
 	data->color[i].red = ft_atoi(r);
+	free(r);
 	if (data->color[i].red < 0 || data->color[i].red > 255)
 		return (0);
 	len = 0;
