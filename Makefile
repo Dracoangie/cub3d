@@ -6,11 +6,11 @@
 #    By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 21:53:56 by angnavar          #+#    #+#              #
-#    Updated: 2025/08/19 20:57:37 by tu_nombre_d      ###   ########.fr        #
+#    Updated: 2025/09/23 16:15:20 by tu_nombre_d      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 
 # Directorios principales
 SRC_DIR = src

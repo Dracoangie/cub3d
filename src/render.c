@@ -6,11 +6,33 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/21 12:58:59 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/23 16:53:36 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static inline int get_texel(const t_img *tex, int x, int y)
+{
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
+	if (x >= tex->width)  x = tex->width - 1;
+	if (y >= tex->height) y = tex->height - 1;
+
+	char *p = tex->img_pixels_ptr + y * tex->line_len + x * (tex->bits_per_pixel / 8);
+	return *(int *)p;
+}
+
+static inline int is_vertical_hit(const t_data *data, t_point hit)
+{
+	double tile = (double)data->player.scale;
+	double fx = fmod((double)hit.x, tile);
+	double fy = fmod((double)hit.y, tile);
+	double dx = fmin(fx, tile - fx);
+	double dy = fmin(fy, tile - fy);
+	return (dx < dy);
+}
+
 
 double ft_degree_to_radian(double degrees)
 {
@@ -67,7 +89,65 @@ void render_line(t_data *data, t_point begin, t_point end, int color)
 		--pixels;
 	}
 }
+void render_textured_column(t_data *data, int col, int y0, int y1, t_point hit, double ray_angle)
+{
+	if (y0 > y1) { int tmp = y0; y0 = y1; y1 = tmp; }
+	if (y1 < 0 || y0 >= HEIGHT) return;
+	if (y0 < 0) y0 = 0;
+	if (y1 >= HEIGHT) y1 = HEIGHT - 1;
 
+	// Si no hay textura, no hacemos nada
+	if (!data->tex_wall.img_ptr || !data->tex_wall.img_pixels_ptr) return;
+
+	const int slice_h = (y1 - y0) + 1;
+	if (slice_h <= 0) return;
+
+	// ¿impacto vertical u horizontal?
+	const int vertical = is_vertical_hit(data, hit);
+
+	// Coordenada u dentro del tile [0,1)
+	const double tile = (double)data->player.scale; // AJUSTA si procede
+	double u = vertical
+		? fmod((double)hit.y, tile) / tile
+		: fmod((double)hit.x, tile) / tile;
+
+	// Dirección del rayo (coincide con tu cálculo)
+	const double ray_dir_x = sin(ray_angle);
+	const double ray_dir_y = cos(ray_angle);
+
+	// Corrección de 'flip' para evitar espejado según la cara golpeada
+	if ((vertical && ray_dir_x > 0.0) || (!vertical && ray_dir_y < 0.0))
+		u = 1.0 - u;
+
+	// X en la textura (fijo para toda la columna)
+	int tex_x = (int)(u * (double)data->tex_wall.width);
+	if (tex_x < 0) tex_x = 0;
+	if (tex_x >= data->tex_wall.width) tex_x = data->tex_wall.width - 1;
+
+	// Recorremos la columna en pantalla y mapeamos Y -> tex_y
+	for (int y = y0; y <= y1; ++y)
+	{
+		double t = (double)(y - y0) / (double)slice_h;      // [0..1]
+		int tex_y = (int)(t * (double)data->tex_wall.height);
+		if (tex_y >= data->tex_wall.height) tex_y = data->tex_wall.height - 1;
+
+		int color = get_texel(&data->tex_wall, tex_x, tex_y);
+
+		// sombreado leve si impacto vertical (opcional)
+		if (vertical) {
+			unsigned int a = (color >> 24) & 0xFF;
+			unsigned int r = (color >> 16) & 0xFF;
+			unsigned int g = (color >> 8)  & 0xFF;
+			unsigned int b = (color)       & 0xFF;
+			r = (r * 200) / 255;
+			g = (g * 200) / 255;
+			b = (b * 200) / 255;
+			color = (a << 24) | (r << 16) | (g << 8) | b;
+		}
+
+		put_pixel(data, col, y, color);
+	}
+}
 
 void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 {
@@ -95,7 +175,8 @@ void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
     if (wall_y[0] > 0)
         {render_vline(data, (t_point){col, 0}, (t_point){col, wall_y[0]-1}, RGB(data->color[0].red, data->color[0].green, data->color[0].blue));
     }
-	render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
+	render_textured_column(data, col, wall_y[0], wall_y[1], hit, ray_angle);
+	//render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
     if (wall_y[1] < HEIGHT-1)
         render_vline(data, (t_point){col, wall_y[1]+1}, (t_point){col, HEIGHT-1},  RGB(data->color[1].red, data->color[1].green, data->color[1].blue));
 }
@@ -184,16 +265,65 @@ int render_circle(t_data *data, int x, int y, int radius)
 	return 0;
 }
 
+void render_minimap_simple(t_data *data)
+{
+	int tile_scale = 20;
+	double tile_px_d = floor(fmin(200 / (double)data->map.cols,
+	                              200 / (double)data->map.rows));
+	if (tile_px_d < 1.0) tile_px_d = 1.0;
+	int tile_px = (int)tile_px_d;
+	int width_map  = tile_px * data->map.cols;
+	int height_map = tile_px * data->map.rows;
+	int aux_a = width_map / data->map.cols;
+	int aux_b = height_map / data->map.rows;
+
+	if (aux_a < 1) aux_a = 1;
+	if (aux_b < 1) aux_b = 1;
+
+	int i = 0;
+	while (i < data->map.rows)
+	{
+		size_t rowlen = ft_strlen(data->map.map[i]);
+		int j = 0;
+		while (j < (int)rowlen && j < data->map.cols)
+		{
+			char c = data->map.map[i][j];
+			int color = DARK_GRAY;
+			if (c == '1')      color = DARK_GRAY;
+			else if (c == '0') color = GRAY;
+
+			int rx = j * aux_a;
+			int ry = i * aux_b;
+			render_rect(data, rx, ry, aux_b, aux_a, color);
+
+			j++;
+		}
+		i++;
+	}
+
+	double world_w = data->map.cols * tile_scale;
+	double world_h = data->map.rows * tile_scale;
+	if (world_w > 0.0 && world_h > 0.0)
+	{
+		int px = (int)((data->player.x / world_w) * width_map  + 0.5);
+		int py = (int)((data->player.y / world_h) * height_map + 0.5);
+		render_rect(data, px - 2, py - 2, 4, 4, BLUE);
+	}
+}
+
+
+
 void draw(t_data *data)
 {
-	int i = 0;
+	/*int i = 0;
 	int j = 0;
 	int x = 0;
-	int y = 0;
+	int y = 0;*/
 
-	render_rect(data, 0, 0, 800, 800, BLACK);
+	//render_rect(data, 0, 0, 800, 800, BLACK);
 
-	while (i < data->map.rows)
+	render_2d_vision(data);
+	/*while (i < data->map.rows)
 	{
 		while (j < data->map.cols)
 		{
@@ -216,8 +346,8 @@ void draw(t_data *data)
 		j = 0;
 		i++;
 	}
-	render_2d_vision(data);
-	render_circle(data, data->player.x, data->player.y, data->player.scale);
+	render_rect(data, data->player.x, data->player.y, data->player.scale, data->player.scale, BLUE);*/
+	render_minimap_simple(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img_ptr, 0, 0);
 }
 

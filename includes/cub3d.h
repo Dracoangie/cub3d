@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/08/25 17:12:46 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/23 16:22:56 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
 #define BLACK 0x000000
-#define GRAY 0x404040
-#define DARK_GRAY 0x808080
+#define DARK_GRAY 0x404040
+#define GRAY  0x808080
 #define WHITE 0xFFFFFF
 #define CYAN 0x007080
 
@@ -46,6 +46,8 @@ typedef struct s_img
 	int bits_per_pixel;
 	int endian;
 	int line_len;
+	int width;
+	int height;
 } t_img;
 
 typedef struct s_player
@@ -85,6 +87,7 @@ typedef struct s_data
 	t_player player;
 	t_file file;
 	t_color color[2];
+	t_img tex_wall;
 } t_data;
 
 typedef struct s_point
