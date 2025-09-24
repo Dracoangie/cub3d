@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/23 21:47:25 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/09/24 12:32:50 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@
 #define GRAY 0x808080
 #define WHITE 0xFFFFFF
 #define CYAN 0x007080
+
+typedef enum e_face
+{
+    TEX_N = 0,
+    TEX_S = 1,
+    TEX_E = 2,
+    TEX_W = 3
+}   t_face;
 
 /* Structs */
 typedef struct s_img
@@ -88,7 +96,7 @@ typedef struct s_data
 	t_player player;
 	t_file file;
 	t_color color[2];
-	t_img tex_wall;
+	t_img tex[4];
 } t_data;
 
 typedef struct s_point

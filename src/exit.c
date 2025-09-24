@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:44:56 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/08/19 19:46:25 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:23:50 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,23 @@
 
 void free_data(t_data *data)
 {
+	int i;
+	
 	mlx_destroy_image(data->mlx, data->img.img_ptr);
 	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_display(data->mlx);
 	if (data->file.file)
 		ft_free_matrix(data->file.file);
 	if (data->map.map)
 		ft_free_matrix(data->map.map);
+	i = 0;
+	while (i < 4)
+	{
+		if (data->mlx && data->tex[i].img_ptr)
+			mlx_destroy_image(data->mlx, data->tex[i].img_ptr);
+		data->tex[i].img_ptr = NULL;
+		i++;
+	}
+	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/21 13:38:17 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 13:07:48 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,27 +57,54 @@ int set_player(t_data *data, int i)
 	}
 	return (hasOne);
 }
+
+static t_face face_from(char coor)
+{
+	if (coor == 'N') return TEX_N;
+	if (coor == 'S') return TEX_S;
+	if (coor == 'E') return TEX_E;
+	return TEX_W; // 'W' u otro -> WEST
+}
+
+int init_tex(t_data *d, t_img *t, const char *path)
+{
+	t->img_ptr = mlx_xpm_file_to_image(d->mlx, (char*)path, &t->width, &t->height);
+	if (!t->img_ptr) return 0;
+	t->img_pixels_ptr = mlx_get_data_addr(t->img_ptr, &t->bits_per_pixel, &t->line_len, &t->endian);
+	return (t->img_pixels_ptr != NULL);
+}
+
 int check_coords(t_data *data, t_point *point, char *str, char coor, char post_coor)
 {
-	while (data->file.file[point->x][0] == '\n')
+	(void)str;
+	while (data->file.file[point->x] && data->file.file[point->x][0] == '\n')
 		point->x++;
-	if (data->file.file[point->x][0] == coor && (data->file.file[point->x][1] == post_coor || data->file.file[point->x][1] == ' '))
+	char *line = data->file.file[point->x];
+	if (!line)
+		return (0);
+	if (line[0] == coor && (line[1] == post_coor || line[1] == ' '))
 	{
-		int n = 0;
-		while (data->file.file[point->x][point->y] == ' ' || data->file.file[point->x][point->y] == post_coor)
-			point->y++;
-		n = (ft_strlen(data->file.file[point->x]) - point->y);
-		if (!ft_strcmp(str, data->file.file, n, point->x, point->y))
-			return (0);
-		if (ft_strcmp(str, data->file.file, n, point->x, point->y))
-		{
-			point->x++;
-			point->y = 1;
-			return (1);
-		}
+		int y = 1;
+		if (line[1] == post_coor)
+			y = 2;
+		while (line[y] == ' ' || line[y] == '\t')
+			y++;
+		size_t len = ft_strlen(line + y);
+		while (len > 0 && (line[y + len - 1] == '\n' || line[y + len - 1] == ' ' ||
+						   line[y + len - 1] == '\t' || line[y + len - 1] == '\r'))
+			len--;
+		char saved = line[y + len];
+		line[y + len] = '\0';
+		t_face face = face_from(coor);
+		int ok = init_tex(data, &data->tex[face], line + y);
+		line[y + len] = saved;
+		point->x++;
+		point->y = 1;
+		return ok ? 1 : 0;
 	}
-	return (0);
+	return 0;
 }
+
 int alpha(char *str)
 {
 	while (*str)

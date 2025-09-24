@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/23 21:56:58 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:04:21 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,14 @@ void init_data(t_data *data, char **av)
 		exit_error(data);
 	data->player.scale = 7;
 
-	// Load wall texture
-	data->tex_wall.img_ptr = mlx_xpm_file_to_image(
-		data->mlx, "pared.xpm", &data->tex_wall.width, &data->tex_wall.height);
-	if (!data->tex_wall.img_ptr)
+	/*if (!init_tex(data, &data->tex[TEX_N], "pared.xpm"))
 		exit_error(data);
-
-	data->tex_wall.img_pixels_ptr = mlx_get_data_addr(
-		data->tex_wall.img_ptr,
-		&data->tex_wall.bits_per_pixel,
-		&data->tex_wall.line_len,
-		&data->tex_wall.endian);
+	if (!init_tex(data, &data->tex[TEX_S], "pared.xpm"))
+		exit_error(data);
+	if (!init_tex(data, &data->tex[TEX_E],  "pared.xpm"))
+		exit_error(data);
+	if (!init_tex(data, &data->tex[TEX_W],  "pared.xpm"))
+		exit_error(data);*/
 }
 
 int main(int ac, char **av)

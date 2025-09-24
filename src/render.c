@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/23 22:09:30 by kpineda-         ###   ########.fr       */
+/*   Updated: 2025/09/24 11:24:08 by tu_nombre_d      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,24 @@
 
 static inline int get_texel(const t_img *tex, int x, int y)
 {
-	if (x < 0)
-		x = 0;
-	if (y < 0)
-		y = 0;
-	if (x >= tex->width)
-		x = tex->width - 1;
-	if (y >= tex->height)
-		y = tex->height - 1;
-
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
+	if (x >= tex->width)  x = tex->width - 1;
+	if (y >= tex->height) y = tex->height - 1;
 	char *p = tex->img_pixels_ptr + y * tex->line_len + x * (tex->bits_per_pixel / 8);
 	return *(int *)p;
 }
 
-#define TILE 20 // tamaño real del tile del mapa
-
 static inline int is_vertical_hit_eps(t_point hit, double ray_dir_x, double ray_dir_y)
 {
 	double tile = (double)TILE;
-
-	double fx = fmod((double)hit.x, tile);
-	if (fx < 0)
-		fx += tile;
-	double fy = fmod((double)hit.y, tile);
-	if (fy < 0)
-		fy += tile;
-
-	double dx = fmin(fx, tile - fx); // distancia a la línea vertical más cercana
-	double dy = fmin(fy, tile - fy); // distancia a la línea horizontal más cercana
-
-	const double eps = 1e-4 * tile; // tolerancia para bordes (ajústala si hace falta)
-
-	if (dx + eps < dy)
-		return 1; // claramente vertical
-	if (dy + eps < dx)
-		return 0; // claramente horizontal
-
-	// Empate (muy cerca de una línea o esquina): decide por la dirección del rayo
-	// Si el rayo “avanza” más en X que en Y, trata como vertical, y viceversa.
+	double fx = fmod((double)hit.x, tile); if (fx < 0) fx += tile;
+	double fy = fmod((double)hit.y, tile); if (fy < 0) fy += tile;
+	double dx = fmin(fx, tile - fx);
+	double dy = fmin(fy, tile - fy);
+	const double eps = 1e-4 * tile;
+	if (dx + eps < dy) return 1;
+	if (dy + eps < dx) return 0;
 	return fabs(ray_dir_x) >= fabs(ray_dir_y);
 }
 
@@ -114,78 +94,61 @@ void render_line(t_data *data, t_point begin, t_point end, int color)
 }
 void render_textured_column(t_data *data, int col, int y0, int y1, t_point hit, double ray_angle)
 {
-	if (y0 > y1)
-	{
-		int tmp = y0;
-		y0 = y1;
-		y1 = tmp;
-	}
-	if (y1 < 0 || y0 >= HEIGHT)
-		return;
-	if (y0 < 0)
-		y0 = 0;
-	if (y1 >= HEIGHT)
-		y1 = HEIGHT - 1;
+	if (y0 > y1) { int tmp = y0; y0 = y1; y1 = tmp; }
+	if (y1 < 0 || y0 >= HEIGHT) return;
+	if (y0 < 0) y0 = 0;
+	if (y1 >= HEIGHT) y1 = HEIGHT - 1;
 
 	const int slice_h = (y1 - y0) + 1;
-	if (slice_h <= 0)
-		return;
+	if (slice_h <= 0) return;
 
-	// Dirección del rayo (coincide con tu cálculo)
+	// Dirección del rayo (usa tu convención actual)
 	const double ray_dir_x = sin(ray_angle);
 	const double ray_dir_y = cos(ray_angle);
 
-	// ¿impacto vertical u horizontal?
+	// ¿golpe vertical u horizontal?
 	const int vertical = is_vertical_hit_eps(hit, ray_dir_x, ray_dir_y);
 
-	// Coordenada u dentro del tile [0,1)
+	// Selección de cara N/S/E/W
+	t_face face;
+	if (vertical)
+		face = (ray_dir_x > 0.0) ? TEX_W : TEX_E;     // mov. +X => pared mirando a W
+	else
+		face = (ray_dir_y > 0.0) ? TEX_N : TEX_S;   // mov. +Y => pared mirando a N
+
+	const t_img *tex = &data->tex[face];
+	if (!tex->img_ptr || !tex->img_pixels_ptr) return;
+
+	// Coordenada U dentro del tile [0..1)
 	const double tile = (double)TILE;
-	double u = vertical
-				   ? fmod((double)hit.y, tile) / tile
-				   : fmod((double)hit.x, tile) / tile;
+	double u = vertical ? fmod((double)hit.y, tile) / tile
+	                    : fmod((double)hit.x, tile) / tile;
+	if (u < 0.0) u += 1.0;
 
-	if (u < 0.0)
-		u = 0.0;
-	if (u >= 1.0)
-		u = 0.999999;
-
-	// Corrección de 'flip' para evitar espejado según la cara golpeada
+	// Flip para mantener orientación consistente
 	if ((vertical && ray_dir_x > 0.0) || (!vertical && ray_dir_y < 0.0))
 		u = 1.0 - u;
 
-	// X en la textura (fijo para toda la columna)
-	int tex_x = (int)(u * (double)data->tex_wall.width);
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= data->tex_wall.width)
-		tex_x = data->tex_wall.width - 1;
+	// Margen medio texel para evitar costuras
+	double margin = 0.5 / (double)tex->width;
+	if (u < margin) u = margin;
+	else if (u > 1.0 - margin) u = 1.0 - margin;
 
-	// Recorremos la columna en pantalla y mapeamos Y -> tex_y
+	int tex_x = (int)(u * (double)tex->width);
+	if (tex_x >= tex->width) tex_x = tex->width - 1;
+
+	// Barrido vertical
 	for (int y = y0; y <= y1; ++y)
 	{
-		double t = (double)(y - y0) / (double)slice_h; // [0..1]
-		int tex_y = (int)(t * (double)data->tex_wall.height);
-		if (tex_y >= data->tex_wall.height)
-			tex_y = data->tex_wall.height - 1;
+		double t = (double)(y - y0) / (double)slice_h;     // [0..1]
+		int tex_y = (int)(t * (double)tex->height);
+		if (tex_y >= tex->height) tex_y = tex->height - 1;
 
-		int color = get_texel(&data->tex_wall, tex_x, tex_y);
-
-		// sombreado leve si impacto vertical (opcional)
-		if (vertical)
-		{
-			unsigned int a = (color >> 24) & 0xFF;
-			unsigned int r = (color >> 16) & 0xFF;
-			unsigned int g = (color >> 8) & 0xFF;
-			unsigned int b = (color) & 0xFF;
-			r = (r * 200) / 255;
-			g = (g * 200) / 255;
-			b = (b * 200) / 255;
-			color = (a << 24) | (r << 16) | (g << 8) | b;
-		}
-
+		int color = get_texel(tex, tex_x, tex_y);
 		put_pixel(data, col, y, color);
 	}
 }
+
 
 void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 {
@@ -214,7 +177,6 @@ void render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 		render_vline(data, (t_point){col, 0}, (t_point){col, wall_y[0] - 1}, RGB(data->color[0].red, data->color[0].green, data->color[0].blue));
 	}
 	render_textured_column(data, col, wall_y[0], wall_y[1], hit, ray_angle);
-	// render_vline(data, (t_point){col, wall_y[0]}, (t_point){col, wall_y[1]}, GRAY);
 	if (wall_y[1] < HEIGHT - 1)
 		render_vline(data, (t_point){col, wall_y[1] + 1}, (t_point){col, HEIGHT - 1}, RGB(data->color[1].red, data->color[1].green, data->color[1].blue));
 }
@@ -303,14 +265,12 @@ int render_circle(t_data *data, int x, int y, int radius)
 
 void render_minimap_simple(t_data *data)
 {
-	int tile_scale = 20;
 	double tile_px_d = floor(fmin(200 / (double)data->map.cols,
-								  200 / (double)data->map.rows));
+	                              200 / (double)data->map.rows));
 	if (tile_px_d < 1.0)
 		tile_px_d = 1.0;
-	int tile_px = (int)tile_px_d;
-	int width_map = tile_px * data->map.cols;
-	int height_map = tile_px * data->map.rows;
+	int width_map  = (int)tile_px_d * data->map.cols;
+	int height_map = (int)tile_px_d * data->map.rows;
 	int aux_a = width_map / data->map.cols;
 	int aux_b = height_map / data->map.rows;
 
@@ -322,70 +282,33 @@ void render_minimap_simple(t_data *data)
 	int i = 0;
 	while (i < data->map.rows)
 	{
-		size_t rowlen = ft_strlen(data->map.map[i]);
 		int j = 0;
-		while (j < (int)rowlen && j < data->map.cols)
+		while (j < (int)ft_strlen(data->map.map[i]) && j < data->map.cols)
 		{
-			char c = data->map.map[i][j];
-			int color = DARK_GRAY;
-			if (c == '1')
-				color = DARK_GRAY;
-			else if (c == '0')
-				color = GRAY;
-
 			int rx = j * aux_a;
 			int ry = i * aux_b;
-			render_rect(data, rx, ry, aux_b, aux_a, color);
-
+			if (data->map.map[i][j] == '1')
+				render_rect(data, rx, ry, aux_b, aux_a, DARK_GRAY);
+			else if (data->map.map[i][j] == '0')
+				render_rect(data, rx, ry, aux_b, aux_a, GRAY);
 			j++;
 		}
 		i++;
 	}
 
-	double world_w = data->map.cols * tile_scale;
-	double world_h = data->map.rows * tile_scale;
+	double world_w = data->map.cols * TILE;
+	double world_h = data->map.rows * TILE;
 	if (world_w > 0.0 && world_h > 0.0)
 	{
-		int px = (int)((data->player.x / world_w) * width_map + 0.5);
-		int py = (int)((data->player.y / world_h) * height_map + 0.5);
-		render_rect(data, px - 2, py - 2, 4, 4, BLUE);
+		aux_a = (int)((data->player.x / world_w) * width_map  + 0.5);
+		aux_b = (int)((data->player.y / world_h) * height_map + 0.5);
+		render_rect(data, aux_a - 2, aux_b - 2, 4, 4, BLUE);
 	}
 }
 
 void draw(t_data *data)
 {
-	/*int i = 0;
-	int j = 0;
-	int x = 0;
-	int y = 0;*/
-
-	// render_rect(data, 0, 0, 800, 800, BLACK);
-
 	render_2d_vision(data);
-	/*while (i < data->map.rows)
-	{
-		while (j < data->map.cols)
-		{
-			if (data->map.map[i][j] == '1')
-				render_rect(data, x, y, 20, 20, BLACK);
-			else if (data->map.map[i][j] == '0')
-				render_rect(data, x, y, 20, 20, GRAY);
-			else if (data->map.map[i][j] == ' ')
-				render_rect(data, x, y, 20, 20, BLACK);
-			else
-			{
-				render_rect(data, x, y, 20, 20, BLACK);
-				j = data->map.cols;
-			}
-			x += 20;
-			j++;
-		}
-		x = 0;
-		y += 20;
-		j = 0;
-		i++;
-	}
-	render_rect(data, data->player.x, data->player.y, data->player.scale, data->player.scale, BLUE);*/
 	render_minimap_simple(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img_ptr, 0, 0);
 }
