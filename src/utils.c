@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:41:39 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 14:00:25 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/24 22:48:40 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void ft_dup_matrix(char **cpy, char **dest)
+void	ft_dup_matrix(char **cpy, char **dest)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (cpy[i])
 	{
 		dest[i] = cpy[i];
@@ -23,17 +24,20 @@ void ft_dup_matrix(char **cpy, char **dest)
 	}
 }
 
-int ft_chrcmp(char *str, char *str2)
+int	ft_chrcmp(char *str, char *str2)
 {
-	int i = 0;
-	int j = 0;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
 	while (str2[j])
 	{
 		if (str[i] == str2[j])
 		{
 			j = 0;
 			i++;
-			continue;
+			continue ;
 		}
 		j++;
 	}
@@ -43,9 +47,11 @@ int ft_chrcmp(char *str, char *str2)
 		return (0);
 }
 
-void ft_free_matrix(char **matrix)
+void	ft_free_matrix(char **matrix)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (matrix[i])
 	{
 		free(matrix[i]);
@@ -54,28 +60,11 @@ void ft_free_matrix(char **matrix)
 	free(matrix);
 }
 
-int	ft_strcmp(const char *s1, char **s2, size_t n, int i, int j)
+double	ft_clamp(double value, double min_value, double max_value)
 {
-	size_t	k;
-
-	k = 0;
-	while (k < n)
-	{
-		if (s1[k] == '\0')
-			return (1) ;
-		if (s1[k] != s2[i][j])
-			return (0);
-		j++;
-		k++;
-	}
-	return (1);
-}
-
-double ft_clamp(double value, double min_value, double max_value)
-{
-    if (value < min_value)
-        return min_value;
-    if (value > max_value)
-        return max_value;
-    return value;
+	if (value < min_value)
+		return (min_value);
+	if (value > max_value)
+		return (max_value);
+	return (value);
 }

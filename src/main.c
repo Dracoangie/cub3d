@@ -3,43 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 14:17:55 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/24 22:56:16 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void player_move(t_data *data, int dir, int speed)
+void	player_move(t_data *data, int dir, int spd)
 {
-	int y = data->player.y + (int)(cos(ft_degree_to_radian(data->player.rotation + dir)) * speed);
-	int x = data->player.x + (int)(sin(ft_degree_to_radian(data->player.rotation + dir)) * speed);
-	int i = 0;
-	int j;
-	while (data->map.map[i])
+	int	y;
+	int	x;
+	int	i;
+	int	j;
+
+	y = data->player.y + (int)(cos(ft_d_r(data->player.rotation + dir)) * spd);
+	x = data->player.x + (int)(sin(ft_d_r(data->player.rotation + dir)) * spd);
+	i = -1;
+	while (data->map.map[++i])
 	{
 		j = 0;
 		while (data->map.map[i][j])
 		{
 			if (data->map.map[i][j] == '1')
 			{
-				if (col_squaresquare((t_rect){x, y, data->player.scale * 2, data->player.scale * 2, BLACK}, (t_rect){j * 20, i * 20, 20, 20, BLACK}))
-					return;
+				if (col_squaresquare((t_rect){x, y, data->player.scale * 2,
+						data->player.scale * 2, BLACK}, (t_rect){j * 20, i * 20,
+					20, 20, BLACK}))
+					return ;
 			}
 			j++;
 		}
-		i++;
 	}
-	data->player.y += (int)(cos(ft_degree_to_radian(data->player.rotation + dir)) * speed);
-	data->player.x += (int)(sin(ft_degree_to_radian(data->player.rotation + dir)) * speed);
+	data->player.y += (int)(cos(ft_d_r(data->player.rotation + dir)) * spd);
+	data->player.x += (int)(sin(ft_d_r(data->player.rotation + dir)) * spd);
 }
 
-void key_hook(int key, t_data *data)
+void	key_hook(int key, t_data *data)
 {
-	int speed = 5;
+	int	speed;
 
+	speed = 5;
 	if (key == XK_Escape)
 		exit_program(data);
 	else if (key == XK_s)
@@ -57,13 +63,15 @@ void key_hook(int key, t_data *data)
 	draw(data);
 }
 
-void init_data(t_data *data, char **av)
+void	init_data(t_data *data, char **av)
 {
 	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "cub3d");
 	data->img.img_ptr = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	data->img.img_pixels_ptr = mlx_get_data_addr(data->img.img_ptr,
-												 &data->img.bits_per_pixel, &data->img.line_len, &data->img.endian);
+			&data->img.bits_per_pixel,
+			&data->img.line_len,
+			&data->img.endian);
 	if (!read_file(data, av[1]))
 		exit_error(data);
 	if (!set_map(data))
@@ -71,9 +79,10 @@ void init_data(t_data *data, char **av)
 	data->player.scale = 7;
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_data data;
+	t_data	data;
+
 	if (ac != 2)
 		return (write(2, "Error\n", 7), 1);
 	init_data(&data, av);

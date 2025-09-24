@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:47:29 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/24 13:51:19 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/24 22:51:30 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int is_vertical_hit_eps(t_point hit, double ray_dir_x, double ray_dir_y)
 	return fabs(ray_dir_x) >= fabs(ray_dir_y);
 }
 
-double ft_degree_to_radian(double degrees)
+double ft_d_r(double degrees)
 {
 	return (degrees * (3.1415 / 180.0));
 }

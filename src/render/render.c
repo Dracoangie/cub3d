@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 13:53:49 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/24 22:51:30 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void render_2d_vision(t_data *data)
 {
 	int i = 0;
 	double angle;
-	double auxangle = ft_degree_to_radian(data->player.rotation - 30);
+	double auxangle = ft_d_r(data->player.rotation - 30);
 	int x;
 	int y;
 	t_point intersection;
@@ -26,7 +26,7 @@ void render_2d_vision(t_data *data)
 	{
 		x = 0;
 		y = 0;
-		angle = ((ft_degree_to_radian(60) * i) / WIDTH) + auxangle;
+		angle = ((ft_d_r(60) * i) / WIDTH) + auxangle;
 		int angle_x = (int)(sin(angle) * 800) + data->player.x + data->player.scale;
 		int angle_y = (int)(cos(angle) * 800) + data->player.y + data->player.scale;
 		intersectionaux = (t_point){angle_x, angle_y};
