@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   collisions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 20:28:38 by tu_nombre_d       #+#    #+#             */
-/*   Updated: 2025/09/24 13:13:11 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 13:59:23 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int col_squaresquare(t_rect rect, t_rect rect2)
 {
-	int hit = 0;
+	int hit;
 
+	hit = 0;
 	if (rect.x < rect2.x + rect2.width && rect.x + rect.width > rect2.x &&
 		rect.y < rect2.y + rect2.height && rect.y + rect.height > rect2.y)
 		hit = 1;
@@ -36,19 +37,18 @@ int aabb_overlap(t_rect rect, t_line line)
 
 int col_squareline(t_rect rect, t_line line, t_point* inter, t_data *data)
 {
-	if (!aabb_overlap(rect, line))
-        return (0);
-
     int hit = 0;
     double closedist = 20000000;
     t_point iaux;
-	int i = -1;
+	int i;
 
     t_point r[4] = { {rect.x, rect.y}, {rect.x + rect.width, rect.y},
         {rect.x + rect.width, rect.y + rect.height},
         {rect.x, rect.y + rect.height}
     };
-
+	if (!aabb_overlap(rect, line))
+        return (0);
+	i = -1;
     while (++i < 4)
 	{
         if (col_lineLine(line.start, line.end, r[i], r[(i+1)%4], &iaux))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/24 12:32:50 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 13:53:37 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,18 +129,30 @@ int col_lineLine(t_point point1, t_point point2, t_point point3, t_point point4,
 int ft_chrcmp(char *str, char *str2);
 void ft_free_matrix(char **matrix);
 void ft_dup_matrix(char **cpy, char **dest);
-double ft_degree_to_radian(double degrees);
 int ft_strcmp(const char *s1, char **s2, size_t n, int i, int j);
 double ft_clamp(double value, double min_value, double max_value);
 
+// render basics
+void	render_vline(t_data *data, t_point begin, t_point end, int color);
+void	render_rect(t_data *data, int x, int y, int height, int width, int color);
+int		render_circle(t_data *data, int x, int y, int radius);
+
 // render
-void render_vline(t_data *data, t_point begin, t_point end, int color);
-void render_rect(t_data *data, int x, int y, int height, int width, int color);
-void draw(t_data *data);
-void put_pixel(t_data *data, int x, int y, int color);
+void	render_minimap_simple(t_data *data);
+void	render_2d_vision(t_data *data);
+void	render_3d_column(t_data *data, t_point hit, double ray_angle, int col);
+void	render_textured_column(t_data *data, int x, int wall_start, int wall_end, t_point hit, double ray_angle);
+void	draw(t_data *data);
+
+//render utils
+void	put_pixel(t_data *data, int x, int y, int color);
+int		get_texel(const t_img *tex, int x, int y);
+int		is_vertical_hit_eps(t_point hit, double ray_dir_x, double ray_dir_y);
+double	ft_degree_to_radian(double degrees);
+
 
 // parse_file
-int read_file(t_data *data, char *name);
+int	read_file(t_data *data, char *name);
 int set_map(t_data *data);
 int parse_file_textures(t_data *data);
 

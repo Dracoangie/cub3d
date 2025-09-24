@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 13:07:48 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 13:56:00 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static t_face face_from(char coor)
 	if (coor == 'N') return TEX_N;
 	if (coor == 'S') return TEX_S;
 	if (coor == 'E') return TEX_E;
-	return TEX_W; // 'W' u otro -> WEST
+	return TEX_W;
 }
 
 int init_tex(t_data *d, t_img *t, const char *path)

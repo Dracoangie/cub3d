@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 13:04:21 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 14:17:55 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void draw(t_data *data);
 
 void player_move(t_data *data, int dir, int speed)
 {
@@ -71,15 +69,6 @@ void init_data(t_data *data, char **av)
 	if (!set_map(data))
 		exit_error(data);
 	data->player.scale = 7;
-
-	/*if (!init_tex(data, &data->tex[TEX_N], "pared.xpm"))
-		exit_error(data);
-	if (!init_tex(data, &data->tex[TEX_S], "pared.xpm"))
-		exit_error(data);
-	if (!init_tex(data, &data->tex[TEX_E],  "pared.xpm"))
-		exit_error(data);
-	if (!init_tex(data, &data->tex[TEX_W],  "pared.xpm"))
-		exit_error(data);*/
 }
 
 int main(int ac, char **av)

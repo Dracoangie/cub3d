@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:44:56 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 13:23:50 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/24 14:17:05 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void free_data(t_data *data)
 	i = 0;
 	while (i < 4)
 	{
+		if (!data->tex[i].img_ptr)
+			break ;
 		if (data->mlx && data->tex[i].img_ptr)
 			mlx_destroy_image(data->mlx, data->tex[i].img_ptr);
 		data->tex[i].img_ptr = NULL;
