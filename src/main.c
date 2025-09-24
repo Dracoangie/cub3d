@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/23 16:04:22 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/23 21:56:58 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void player_move(t_data *data, int dir, int speed)
 	int x = data->player.x + (int)(sin(ft_degree_to_radian(data->player.rotation + dir)) * speed);
 	int i = 0;
 	int j;
-	while(data->map.map[i])
+	while (data->map.map[i])
 	{
 		j = 0;
-		while(data->map.map[i][j])
+		while (data->map.map[i][j])
 		{
 			if (data->map.map[i][j] == '1')
 			{
-				if(col_squaresquare((t_rect){x, y, data->player.scale *2, data->player.scale *2, BLACK}, (t_rect){j * 20, i * 20, 20, 20, BLACK}))
+				if (col_squaresquare((t_rect){x, y, data->player.scale * 2, data->player.scale * 2, BLACK}, (t_rect){j * 20, i * 20, 20, 20, BLACK}))
 					return;
 			}
 			j++;
@@ -49,13 +49,13 @@ void key_hook(int key, t_data *data)
 	else if (key == XK_w)
 		player_move(data, 0, speed);
 	else if (key == XK_a)
-		player_move(data, 270, speed);
-	else if (key == XK_d)
 		player_move(data, 90, speed);
+	else if (key == XK_d)
+		player_move(data, 270, speed);
 	if (key == XK_Right)
-		data->player.rotation += speed;
-	else if (key == XK_Left)
 		data->player.rotation -= speed;
+	else if (key == XK_Left)
+		data->player.rotation += speed;
 	draw(data);
 }
 
@@ -70,7 +70,7 @@ void init_data(t_data *data, char **av)
 		exit_error(data);
 	if (!set_map(data))
 		exit_error(data);
-	data->player.scale = 5;
+	data->player.scale = 7;
 
 	// Load wall texture
 	data->tex_wall.img_ptr = mlx_xpm_file_to_image(
@@ -83,7 +83,6 @@ void init_data(t_data *data, char **av)
 		&data->tex_wall.bits_per_pixel,
 		&data->tex_wall.line_len,
 		&data->tex_wall.endian);
-
 }
 
 int main(int ac, char **av)

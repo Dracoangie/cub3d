@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tu_nombre_de_usuario <tu_email@ejemplo.    +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/23 16:22:56 by tu_nombre_d      ###   ########.fr       */
+/*   Updated: 2025/09/23 21:47:25 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@
 #define BUFFER_SIZE 1000000
 #define WIDTH 800
 #define HEIGHT 800
-#define RGB(r,g,b)   (((r) << 16) | ((g) << 8) | (b))
+#define TILE 20
+#define RGB(r, g, b) (((r) << 16) | ((g) << 8) | (b))
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
 #define BLACK 0x000000
 #define DARK_GRAY 0x404040
-#define GRAY  0x808080
+#define GRAY 0x808080
 #define WHITE 0xFFFFFF
 #define CYAN 0x007080
 
