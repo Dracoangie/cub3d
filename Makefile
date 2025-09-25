@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+         #
+#    By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/02 21:53:56 by angnavar          #+#    #+#              #
-#    Updated: 2025/09/24 14:10:10 by angnavar         ###   ########.fr        #
+#    Created: 2025/09/25 02:32:57 by kpineda-          #+#    #+#              #
+#    Updated: 2025/09/25 02:33:02 by kpineda-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ MINILIBX = $(MINILIBX_DIR)/libmlx.a
 
 SRC = src/gnl_utils.c src/gnl.c \
 		src/utils.c src/main.c src/exit.c src/collisions.c \
-		src/render/render_3d.c src/render/render_utils.c src/render/render.c src/render/render_basic.c\
+		src/render/render_3d.c src/render/render_utils.c src/render/render.c \
+		src/render/render_basic.c src/render/render_textures.c\
 		src/parse/parse_file.c src/parse/parse_map.c
 OBJ_DIR = obj
 OBJ = $(SRC:.c=.o)

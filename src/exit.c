@@ -6,7 +6,7 @@
 /*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 17:44:56 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 22:57:10 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/25 12:24:42 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	free_data(t_data *data)
 	i = 0;
 	while (i < 4)
 	{
-		if (!data->tex[i].img_ptr)
-			break ;
-		if (data->mlx && data->tex[i].img_ptr)
+		if (data->tex[i].img_ptr != NULL)
+		{
 			mlx_destroy_image(data->mlx, data->tex[i].img_ptr);
-		data->tex[i].img_ptr = NULL;
+			data->tex[i].img_ptr = NULL;
+		}
 		i++;
 	}
 	mlx_destroy_display(data->mlx);

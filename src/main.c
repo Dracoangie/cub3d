@@ -6,7 +6,7 @@
 /*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 22:56:16 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/25 12:25:11 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	key_hook(int key, t_data *data)
 
 void	init_data(t_data *data, char **av)
 {
+	int	i;
+
 	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "cub3d");
 	data->img.img_ptr = mlx_new_image(data->mlx, WIDTH, HEIGHT);
@@ -72,6 +74,9 @@ void	init_data(t_data *data, char **av)
 			&data->img.bits_per_pixel,
 			&data->img.line_len,
 			&data->img.endian);
+	i = -1;
+	while (++i < 4)
+		data->tex[i].img_ptr = NULL;
 	if (!read_file(data, av[1]))
 		exit_error(data);
 	if (!set_map(data))

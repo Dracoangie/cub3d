@@ -6,7 +6,7 @@
 /*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/24 23:46:45 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/25 11:29:15 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@
 # include <unistd.h>
 
 # define BUFFER_SIZE 1000000
-# define WIDTH 800
-# define HEIGHT 800
+# define WIDTH 1800
+# define HEIGHT 1800
 # define TILE 20
-# define RGB(r, g, b) (((r) << 16) | ((g) << 8) | (b))
 # define RED 0xFF0000
 # define GREEN 0x00FF00
 # define BLUE 0x0000FF
 # define BLACK 0x000000
-# define DARK_GRAY 0x404040
+# define D_GRAY 0x404040
 # define GRAY 0x808080
 # define WHITE 0xFFFFFF
 # define CYAN 0x007080
@@ -76,7 +75,7 @@ typedef struct s_map
 
 typedef struct s_file
 {
-	int			file_lines;
+	int			ls;
 	char		**file;
 }				t_file;
 
@@ -139,6 +138,20 @@ typedef struct s_column_params
     double  ray_angle;
 }   t_column_params;
 
+typedef struct s_tex_params
+{
+    t_data  *data;
+    t_point  hit;
+    double   ray_dir_x;
+    double   ray_dir_y;
+    int      vertical;
+    int      tex_x_val;
+    t_face   face_val;
+    int     *tex_x;
+    t_face  *face;
+    t_img   *tex;
+} t_tex_params;
+
 
 // collisions
 int				col_squaresquare(t_rect rect, t_rect rect2);
@@ -155,15 +168,15 @@ double			ft_clamp(double value, double min_value, double max_value);
 // render basics
 void			render_vline(t_data *data, t_point begin, t_point end,
 					int color);
-void			render_rect(t_data *data, int x, int y, int height, int width,
+void			render_rect(t_data *data, t_point point, t_point size,
 					int color);
 int				render_circle(t_data *data, int x, int y, int radius);
 
 // render
-void			render_minimap_simple(t_data *data);
 void			render_2d_vision(t_data *data);
 void			render_3d_column(t_data *data, t_point hit, double ray_angle,
 					int col);
+void			render_textured_column(t_data *data, t_column_params p);
 void			draw(t_data *data);
 
 //render utils

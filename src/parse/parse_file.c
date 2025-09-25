@@ -3,51 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/24 13:56:00 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/09/25 12:25:44 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int parse_coords(t_data *data)
+int	parse_coords(t_data *data)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (data->file.file[i])
 	{
 		if (data->file.file[i][0] == '\n')
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (ft_chrcmp(data->file.file[i], " 01NSEW\n"))
-			break;
+			break ;
 		i++;
 	}
-	if (i == data->file.file_lines)
+	if (i == data->file.ls)
 		return (0);
 	return (i);
 }
 
-int set_player(t_data *data, int i)
+int	set_player_rotation(t_data *data, int i, int j)
 {
-	int j = 0;
-	int hasOne = 0;
+	if (data->map.map[i][j] == 'N')
+		data->player.rotation = 180;
+	else if (data->map.map[i][j] == 'S')
+		data->player.rotation = 0;
+	else if (data->map.map[i][j] == 'W')
+		data->player.rotation = 270;
+	else if (data->map.map[i][j] == 'E')
+		data->player.rotation = 90;
+	return (-1);
+}
 
+int	set_player(t_data *data, int i)
+{
+	int	j;
+	int	hasOne;
+
+	j = 0;
+	hasOne = 0;
 	while (data->map.map[i][j])
 	{
-		if (data->map.map[i][j] == 'N' || data->map.map[i][j] == 'S' || data->map.map[i][j] == 'W' || data->map.map[i][j] == 'E')
+		if (data->map.map[i][j] == 'N' || data->map.map[i][j] == 'S'
+			|| data->map.map[i][j] == 'W' || data->map.map[i][j] == 'E')
 		{
-			if (data->map.map[i][j] == 'N')
-				data->player.rotation = 180;
-			else if (data->map.map[i][j] == 'S')
-				data->player.rotation = 0;
-			else if (data->map.map[i][j] == 'W')
-				data->player.rotation = 270;
-			else if (data->map.map[i][j] == 'E')
-				data->player.rotation = 90;
+			set_player_rotation(data, i, j);
 			data->map.map[i][j] = '0';
 			data->player.x = j * 20;
 			data->player.y = i * 20;
@@ -58,54 +69,68 @@ int set_player(t_data *data, int i)
 	return (hasOne);
 }
 
-static t_face face_from(char coor)
+static t_face	face_from(char coor)
 {
-	if (coor == 'N') return TEX_N;
-	if (coor == 'S') return TEX_S;
-	if (coor == 'E') return TEX_E;
-	return TEX_W;
+	if (coor == 'N')
+		return (TEX_N);
+	if (coor == 'S')
+		return (TEX_S);
+	if (coor == 'E')
+		return (TEX_E);
+	return (TEX_W);
 }
 
-int init_tex(t_data *d, t_img *t, const char *path)
+int	init_tex(t_data *d, t_img *t, const char *path)
 {
-	t->img_ptr = mlx_xpm_file_to_image(d->mlx, (char*)path, &t->width, &t->height);
-	if (!t->img_ptr) return 0;
-	t->img_pixels_ptr = mlx_get_data_addr(t->img_ptr, &t->bits_per_pixel, &t->line_len, &t->endian);
+	t->img_ptr = mlx_xpm_file_to_image(d->mlx, (char *)path, &t->width,
+			&t->height);
+	if (!t->img_ptr)
+		return (0);
+	t->img_pixels_ptr = mlx_get_data_addr(t->img_ptr, &t->bits_per_pixel,
+			&t->line_len, &t->endian);
 	return (t->img_pixels_ptr != NULL);
 }
 
-int check_coords(t_data *data, t_point *point, char *str, char coor, char post_coor)
+int	check_coords(t_data *data, t_point *point, char *str, char coor,
+		char post_coor)
 {
+	char	*line;
+	int		y;
+	size_t	len;
+	char	saved;
+	t_face	face;
+	int		ok;
+
 	(void)str;
 	while (data->file.file[point->x] && data->file.file[point->x][0] == '\n')
 		point->x++;
-	char *line = data->file.file[point->x];
+	line = data->file.file[point->x];
 	if (!line)
 		return (0);
 	if (line[0] == coor && (line[1] == post_coor || line[1] == ' '))
 	{
-		int y = 1;
+		y = 1;
 		if (line[1] == post_coor)
 			y = 2;
 		while (line[y] == ' ' || line[y] == '\t')
 			y++;
-		size_t len = ft_strlen(line + y);
-		while (len > 0 && (line[y + len - 1] == '\n' || line[y + len - 1] == ' ' ||
-						   line[y + len - 1] == '\t' || line[y + len - 1] == '\r'))
+		len = ft_strlen(line + y);
+		while (len > 0 && (line[y + len - 1] == '\n' || line[y + len - 1] == ' '
+				|| line[y + len - 1] == '\t' || line[y + len - 1] == '\r'))
 			len--;
-		char saved = line[y + len];
+		saved = line[y + len];
 		line[y + len] = '\0';
-		t_face face = face_from(coor);
-		int ok = init_tex(data, &data->tex[face], line + y);
+		face = face_from(coor);
+		ok = init_tex(data, &data->tex[face], line + y);
 		line[y + len] = saved;
 		point->x++;
 		point->y = 1;
-		return ok ? 1 : 0;
+		return (ok);
 	}
-	return 0;
+	return (0);
 }
 
-int alpha(char *str)
+int	alpha(char *str)
 {
 	while (*str)
 	{
@@ -121,9 +146,10 @@ int alpha(char *str)
 	return (1);
 }
 
-int coma_case(t_data *data, t_point *point, int len, int i)
+int	coma_case(t_data *data, t_point *point, int len, int i)
 {
-	char *r;
+	char	*r;
+
 	if (data->file.file[point->x][point->y] != ',')
 		return (1);
 	point->y++;
@@ -150,12 +176,16 @@ int coma_case(t_data *data, t_point *point, int len, int i)
 	return (free(r), 1);
 }
 
-int check_floor_ceiling(t_data *data, t_point *point, char c, int i)
+int	check_floor_ceiling(t_data *data, t_point *point, char c, int i)
 {
-	int len = 0;
+	int		len;
+	char	*r;
+
+	len = 0;
 	while (data->file.file[point->x][0] == '\n')
 		point->x++;
-	if (data->file.file[point->x][0] != c || data->file.file[point->x][1] != ' ')
+	if (data->file.file[point->x][0] != c
+		|| data->file.file[point->x][1] != ' ')
 		return (1);
 	while (data->file.file[point->x][point->y] == ' ')
 		point->y++;
@@ -164,7 +194,7 @@ int check_floor_ceiling(t_data *data, t_point *point, char c, int i)
 		len++;
 		point->y++;
 	}
-	char *r = ft_substr(data->file.file[point->x], point->y - len, len);
+	r = ft_substr(data->file.file[point->x], point->y - len, len);
 	if (!alpha(r))
 		return (free(r), 0);
 	free(r);
@@ -179,12 +209,12 @@ int check_floor_ceiling(t_data *data, t_point *point, char c, int i)
 	return (point->x++, point->y = 1, 1);
 }
 
-int parse_file_textures(t_data *data)
+int	parse_file_textures(t_data *data)
 {
-	t_point point;
+	t_point	point;
+
 	point.x = 0;
 	point.y = 1;
-
 	point = (t_point){0, 1};
 	if (!check_coords(data, &point, "./path_to_the_north_texture", 'N', 'O'))
 		return (0);
@@ -201,11 +231,14 @@ int parse_file_textures(t_data *data)
 	return (1);
 }
 
-int clean_matrix(t_data *data, int i)
+int	clean_matrix(t_data *data, int i)
 {
-	int j = 0;
-	int hasOne = 0;
-	data->map.map = (char **)malloc(sizeof(char *) * (data->file.file_lines - i + 1));
+	int	j;
+	int	hasOne;
+
+	j = 0;
+	hasOne = 0;
+	data->map.map = (char **)malloc(sizeof(char *) * (data->file.ls - i + 1));
 	while (data->file.file[i])
 	{
 		if (data->file.file[i][0] == '\n')
@@ -227,7 +260,7 @@ int clean_matrix(t_data *data, int i)
 	return (data->map.map[j] = NULL, 1);
 }
 
-int set_map(t_data *data)
+int	set_map(t_data *data)
 {
 	if (!parse_file_textures(data))
 		return (data->map.map = NULL, 0);
@@ -246,12 +279,14 @@ int set_map(t_data *data)
 	return (1);
 }
 
-int read_file(t_data *data, char *name)
+int	read_file(t_data *data, char *name)
 {
-	int i = 0;
-	char *line;
-	char **aux;
-	int fd;
+	int		i;
+	char	*line;
+	char	**aux;
+	int		fd;
+
+	i = 0;
 	if ((fd = open(name, O_RDONLY)) < 0)
 		return (data->file.file = NULL, data->map.map = NULL, 0);
 	data->file.file = (char **)malloc(sizeof(char *) * 2);
@@ -266,7 +301,7 @@ int read_file(t_data *data, char *name)
 	}
 	free(line);
 	data->file.file[i] = NULL;
-	data->file.file_lines = i;
+	data->file.ls = i;
 	close(fd);
 	return (1);
 }
