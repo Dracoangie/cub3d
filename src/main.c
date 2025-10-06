@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/25 12:25:11 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/02 12:58:15 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	player_move(t_data *data, int dir, int spd)
-{
-	int	y;
-	int	x;
-	int	i;
-	int	j;
-
-	y = data->player.y + (int)(cos(ft_d_r(data->player.rotation + dir)) * spd);
-	x = data->player.x + (int)(sin(ft_d_r(data->player.rotation + dir)) * spd);
-	i = -1;
-	while (data->map.map[++i])
-	{
-		j = 0;
-		while (data->map.map[i][j])
-		{
-			if (data->map.map[i][j] == '1')
-			{
-				if (col_squaresquare((t_rect){x, y, data->player.scale * 2,
-						data->player.scale * 2, BLACK}, (t_rect){j * 20, i * 20,
-					20, 20, BLACK}))
-					return ;
-			}
-			j++;
-		}
-	}
-	data->player.y += (int)(cos(ft_d_r(data->player.rotation + dir)) * spd);
-	data->player.x += (int)(sin(ft_d_r(data->player.rotation + dir)) * spd);
-}
 
 void	key_hook(int key, t_data *data)
 {

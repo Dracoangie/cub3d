@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+         #
+#    By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/25 02:32:57 by kpineda-          #+#    #+#              #
-#    Updated: 2025/09/25 02:33:02 by kpineda-         ###   ########.fr        #
+#    Updated: 2025/10/02 13:00:18 by angnavar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,11 @@ LIBFT = $(LIBFT_DIR)/libft.a
 MINILIBX = $(MINILIBX_DIR)/libmlx.a
 
 SRC = src/gnl_utils.c src/gnl.c \
-		src/utils.c src/main.c src/exit.c src/collisions.c \
+		src/utils.c src/main.c src/exit.c src/collisions.c src/player.c \
 		src/render/render_3d.c src/render/render_utils.c src/render/render.c \
 		src/render/render_basic.c src/render/render_textures.c\
-		src/parse/parse_file.c src/parse/parse_map.c
+		src/parse/parse_file.c src/parse/parse_map.c src/parse/checker.c \
+		src/parse/checker_coords.c
 OBJ_DIR = obj
 OBJ = $(SRC:.c=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))

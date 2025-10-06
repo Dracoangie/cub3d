@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/25 11:29:15 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:45:23 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include <unistd.h>
 
 # define BUFFER_SIZE 1000000
-# define WIDTH 1800
-# define HEIGHT 1800
+# define WIDTH 1200
+# define HEIGHT 800
 # define TILE 20
 # define RED 0xFF0000
 # define GREEN 0x00FF00
@@ -173,6 +173,7 @@ void			render_rect(t_data *data, t_point point, t_point size,
 int				render_circle(t_data *data, int x, int y, int radius);
 
 // render
+void			player_move(t_data *data, int dir, int spd);
 void			render_2d_vision(t_data *data);
 void			render_3d_column(t_data *data, t_point hit, double ray_angle,
 					int col);
@@ -186,10 +187,19 @@ int				is_vertical_hit_eps(t_point hit, double ray_dir_x,
 					double ray_dir_y);
 double			ft_d_r(double degrees);
 
+//checker
+int	check_coords(t_data *data, t_point *point, char coor,
+		char post_coor);
+int	check_floor_ceiling(t_data *data, t_point *point, char c, int i);
+int	coma_case(t_data *data, t_point *point, int len, int i);
+
 // parse_file
+int				set_player(t_data *data, int i);
 int				read_file(t_data *data, char *name);
 int				set_map(t_data *data);
 int				parse_file_textures(t_data *data);
+int				clean_matrix(t_data *data, int i);
+int				parse_coords(t_data *data);
 
 // parse map
 int				check_around(int i, int j, t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/09/25 12:25:33 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:47:10 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	render_2d_vision(t_data *data)
 		x = 0;
 		y = 0;
 		angle = ((ft_d_r(60) * i) / WIDTH) + auxangle;
-		angle_x = (int)(sin(angle) * 800) + data->player.x + data->player.scale;
-		angle_y = (int)(cos(angle) * 800) + data->player.y + data->player.scale;
+		angle_x = (int)(sin(angle) * WIDTH) + data->player.x + data->player.scale;
+		angle_y = (int)(cos(angle) * WIDTH) + data->player.y + data->player.scale;
 		intersectionaux = (t_point){angle_x, angle_y};
 		while (data->map.map[y])
 		{
