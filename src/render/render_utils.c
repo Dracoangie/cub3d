@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:47:29 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/25 01:50:29 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/06 19:04:05 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	is_vertical_hit_eps(t_point hit, double ray_dir_x, double ray_dir_y)
 		fy += TILE;
 	dx = fmin(fx, TILE - fx);
 	dy = fmin(fy, TILE - fy);
-	eps = 1e-4 * TILE;
+	eps = 1e-2 * TILE;
 	if (dx + eps < dy)
 		return (1);
 	if (dy + eps < dx)

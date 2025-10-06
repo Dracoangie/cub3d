@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 02:09:32 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/25 11:24:15 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/06 19:08:43 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	normalize_column_limits(int *y0, int *y1)
+int	normalize_column_limits(int *y0, int *y1)
 {
 	int	tmp;
 
@@ -31,32 +31,35 @@ static int	normalize_column_limits(int *y0, int *y1)
 	return ((*y1 - *y0 + 1) > 0);
 }
 
-static int	calculate_tex_x(t_tex_params *p)
+int  calculate_tex_x(t_tex_params *p, double bias)
 {
-	double	u;
-	double	margin;
+	double  u;
+	double  coord;
+	int     tx;
 
-	if (p->vertical == 1)
-		u = fmod((double)p->hit.y, TILE) / TILE;
+	if (p->vertical)
+		coord = (p->hit.y + 0.0001) / TILE;
 	else
-		u = fmod((double)p->hit.x, TILE) / TILE;
-	if (u < 0.0)
-		u += 1.0;
-	if ((p->vertical == 1 && p->ray_dir_x > 0.0) || (p->vertical == 0
-			&& p->ray_dir_y < 0.0))
+		coord = (p->hit.x + 0.0001) / TILE;
+	u = coord - floor(coord);
+	if ((p->vertical && p->ray_dir_x > 0.0)
+		|| (!p->vertical && p->ray_dir_y < 0.0))
 		u = 1.0 - u;
-	margin = 0.5 / (double)p->tex->width;
-	if (u < margin)
-		u = margin;
-	else if (u > 1.0 - margin)
-		u = 1.0 - margin;
-	*(p->tex_x) = (int)(u * (double)p->tex->width);
-	if (*(p->tex_x) >= p->tex->width)
+	*(p->tex_x) = (int)(u * p->tex->width);
+	if (*(p->tex_x) < 0)
+		*(p->tex_x) = 0;
+	else if (*(p->tex_x) >= p->tex->width)
 		*(p->tex_x) = p->tex->width - 1;
-	return (1);
+	tx = (int)floor((u + bias) * (double)p->tex->width);
+	if (tx < 0)
+		tx = 0;
+	if (tx >= p->tex->width)
+		tx = p->tex->width - 1;
+	*(p->tex_x) = tx;
+		return (1);
 }
 
-static int	get_tex_and_u(t_tex_params *p)
+int	get_tex_and_u(t_tex_params *p)
 {
 	p->vertical = is_vertical_hit_eps(p->hit, p->ray_dir_x, p->ray_dir_y);
 	if (p->vertical == 1)
@@ -76,23 +79,27 @@ static int	get_tex_and_u(t_tex_params *p)
 	p->tex = &p->data->tex[*(p->face)];
 	if (!p->tex->img_ptr || !p->tex->img_pixels_ptr)
 		return (0);
-	return (calculate_tex_x(p));
+	return (calculate_tex_x(p, 1e-9));
 }
 
-static void	draw_textured_column(t_data *data, t_column_params p, t_img *tex,
+void	draw_textured_column(t_data *data, t_column_params p, t_img *tex,
 		int tex_x)
 {
-	int	y;
-	int	slice_h;
-	int	tex_y;
+	int		y;
+	int		slice_h;
+	int		tex_y;
+	double	t;
 
 	y = p.y0;
 	slice_h = p.y1 - p.y0 + 1;
 	while (y <= p.y1)
 	{
-		tex_y = (int)(((double)(y - p.y0) / slice_h) * tex->height);
+		t = (double)(y - p.y0) / (double)slice_h;
+		tex_y = (int)floor((t + 1e-9) * (double)tex->height);
 		if (tex_y >= tex->height)
 			tex_y = tex->height - 1;
+		if (tex_y < 0)
+			tex_y = 0;
 		put_pixel(data, p.col, y, get_texel(tex, tex_x, tex_y));
 		y++;
 	}

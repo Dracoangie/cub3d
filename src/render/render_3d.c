@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_3d.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:51:45 by angnavar          #+#    #+#             */
-/*   Updated: 2025/09/25 11:23:40 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/06 19:12:41 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ void	render_3d_column(t_data *data, t_point hit, double ray_angle, int col)
 	t_point			wall_limits;
 
 	calculate_wall_limits(data, hit, ray_angle, &wall_limits);
-	render_ceiling_floor_column(data, col, wall_limits);
 	params.col = col;
 	params.y0 = wall_limits.x;
 	params.y1 = wall_limits.y;
 	params.hit = hit;
 	params.ray_angle = ray_angle;
 	render_textured_column(data, params);
+	render_ceiling_floor_column(data, col, wall_limits);
 }
