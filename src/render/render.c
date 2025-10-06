@@ -6,62 +6,76 @@
 /*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/02 13:47:10 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:15:35 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	render_2d_aux(t_data *data, t_point cords, t_point angle,
+		t_point *intersectionaux)
+{
+	t_point	intersection;
+	double	intersectiondist;
+	double	auxdist;
+
+	if (data->map.map[cords.y][cords.x] == '1')
+	{
+		if (col_squareline((t_rect){cords.x * 20, cords.y * 20, 20, 20, RED},
+				(t_line){(t_point){data->player.x
+				+ data->player.scale, data->player.y
+				+ data->player.scale}, angle},
+				&intersection, data))
+		{
+			intersectiondist = pow(intersection.x - data->player.x,
+					2) + pow(intersection.y - data->player.y, 2);
+			auxdist = pow(intersectionaux->x - data->player.x, 2)
+				+ pow(intersectionaux->y - data->player.y, 2);
+			if (intersectiondist < auxdist)
+				*intersectionaux = (t_point){intersection.x,
+					intersection.y};
+		}
+	}
+}
+
+double	render_2d_aux_2(double	auxangle, int i, t_data *data,
+		t_point *intersectionaux)
+{
+	t_point angle_point;
+	t_point x_y;
+	double	angle;
+
+	x_y.x = 0;
+	x_y.y = 0;
+	angle = ((ft_d_r(60) * i) / WIDTH) + auxangle;
+	angle_point.x = (int)(sin(angle) * WIDTH) + data->player.x + data->player.scale;
+	angle_point.y = (int)(cos(angle) * WIDTH) + data->player.y + data->player.scale;
+	*intersectionaux = (t_point){angle_point.x, angle_point.y};
+	while (data->map.map[x_y.y])
+	{
+		while (data->map.map[x_y.y][x_y.x])
+		{
+			render_2d_aux(data, x_y, angle_point, intersectionaux);
+			x_y.x++;
+		}
+		x_y.x = 0;
+		x_y.y++;
+	}
+	return (angle);
+}
 
 void	render_2d_vision(t_data *data)
 {
 	int		i;
 	double	angle;
 	double	auxangle;
-	int		x;
-	int		y;
-	t_point	intersection;
 	t_point	intersectionaux;
-	int		angle_x;
-	int		angle_y;
-	double	intersectiondist;
-	double	auxdist;
 
 	i = 0;
 	auxangle = ft_d_r(data->player.rotation - 30);
 	while (i < WIDTH)
 	{
-		x = 0;
-		y = 0;
-		angle = ((ft_d_r(60) * i) / WIDTH) + auxangle;
-		angle_x = (int)(sin(angle) * WIDTH) + data->player.x + data->player.scale;
-		angle_y = (int)(cos(angle) * WIDTH) + data->player.y + data->player.scale;
-		intersectionaux = (t_point){angle_x, angle_y};
-		while (data->map.map[y])
-		{
-			while (data->map.map[y][x])
-			{
-				if (data->map.map[y][x] == '1')
-				{
-					if (col_squareline((t_rect){x * 20, y * 20, 20, 20, RED},
-							(t_line){(t_point){data->player.x
-							+ data->player.scale, data->player.y
-							+ data->player.scale}, (t_point){angle_x, angle_y}},
-							&intersection, data))
-					{
-						intersectiondist = pow(intersection.x - data->player.x,
-								2) + pow(intersection.y - data->player.y, 2);
-						auxdist = pow(intersectionaux.x - data->player.x, 2)
-							+ pow(intersectionaux.y - data->player.y, 2);
-						if (intersectiondist < auxdist)
-							intersectionaux = (t_point){intersection.x,
-								intersection.y};
-					}
-				}
-				x++;
-			}
-			x = 0;
-			y++;
-		}
+		angle = render_2d_aux_2(auxangle, i, data, &intersectionaux);
 		render_3d_column(data, intersectionaux, angle, WIDTH - 1 - i);
 		i++;
 	}
