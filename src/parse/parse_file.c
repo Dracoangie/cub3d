@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/02 13:00:43 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 18:54:10 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,28 +58,28 @@ int	parse_file_textures(t_data *data)
 int	clean_matrix(t_data *data, int i)
 {
 	int	j;
-	int	hasOne;
+	int	has_one;
 
 	j = 0;
-	hasOne = 0;
+	has_one = 0;
 	data->map.map = (char **)malloc(sizeof(char *) * (data->file.ls - i + 1));
 	while (data->file.file[i])
 	{
 		if (data->file.file[i][0] == '\n')
 			return (data->map.map[j] = NULL, 0);
-		else if (ft_chrcmp(data->file.file[i], " 01NSWE\n"))
+		else if (ft_chrcmp(data->file.file[i], " 01NSWE\n\t"))
 		{
 			data->map.map[j] = ft_strdup(data->file.file[i]);
 			if (data->file.file[i + 1])
 				data->map.map[j][ft_strlen(data->file.file[i]) - 1] = 0;
-			hasOne += set_player(data, j);
+			has_one += set_player(data, j);
 		}
 		else
 			return (data->map.map[j] = NULL, 0);
 		i++;
 		j++;
 	}
-	if (hasOne != 1)
+	if (has_one != 1)
 		return (data->map.map[j] = NULL, 0);
 	return (data->map.map[j] = NULL, 1);
 }
@@ -92,10 +92,12 @@ int	read_file(t_data *data, char *name)
 	int		fd;
 
 	i = 0;
-	if ((fd = open(name, O_RDONLY)) < 0)
+	fd = open(name, O_RDONLY);
+	if (fd < 0)
 		return (data->file.file = NULL, data->map.map = NULL, 0);
 	data->file.file = (char **)malloc(sizeof(char *) * 2);
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		aux = data->file.file;
 		aux[i] = NULL;
@@ -103,10 +105,10 @@ int	read_file(t_data *data, char *name)
 		ft_dup_matrix(aux, data->file.file);
 		data->file.file[i++] = line;
 		free(aux);
+		line = get_next_line(fd);
 	}
 	free(line);
 	data->file.file[i] = NULL;
 	data->file.ls = i;
-	close(fd);
-	return (1);
+	return (close(fd), 1);
 }

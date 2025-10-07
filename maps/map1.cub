@@ -1,7 +1,8 @@
-N ./pared.xpm
-S ./log.xpm
-WE ./stone.xpm
-EA ./wood.xpm
+N ./textures/pared.xpm
+S ./textures/log.xpm
+
+WE ./textures/stone.xpm
+EA ./textures/wood.xpm
 
 F 200, 100, 0
 C 100, 34, 0
@@ -10,7 +11,7 @@ C 100, 34, 0
 111111111111111
 110000000000011
 110000000000011
-1100000N0000011
+1100000S0000011
 110000000000011
 110000000000011
 110000000000011

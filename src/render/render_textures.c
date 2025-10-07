@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 02:09:32 by angnavar          #+#    #+#             */
-/*   Updated: 2025/10/06 19:08:43 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:34:45 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ int	normalize_column_limits(int *y0, int *y1)
 	return ((*y1 - *y0 + 1) > 0);
 }
 
-int  calculate_tex_x(t_tex_params *p, double bias)
+int	calculate_tex_x(t_tex_params *p, double bias)
 {
-	double  u;
-	double  coord;
-	int     tx;
+	double	u;
+	double	coord;
+	int		tx;
 
 	if (p->vertical)
 		coord = (p->hit.y + 0.0001) / TILE;
 	else
 		coord = (p->hit.x + 0.0001) / TILE;
 	u = coord - floor(coord);
-	if ((p->vertical && p->ray_dir_x > 0.0)
-		|| (!p->vertical && p->ray_dir_y < 0.0))
+	if ((p->vertical && p->ray_dir_x > 0.0) || (!p->vertical
+			&& p->ray_dir_y < 0.0))
 		u = 1.0 - u;
 	*(p->tex_x) = (int)(u * p->tex->width);
 	if (*(p->tex_x) < 0)
@@ -56,7 +56,7 @@ int  calculate_tex_x(t_tex_params *p, double bias)
 	if (tx >= p->tex->width)
 		tx = p->tex->width - 1;
 	*(p->tex_x) = tx;
-		return (1);
+	return (1);
 }
 
 int	get_tex_and_u(t_tex_params *p)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/10/02 13:45:23 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:48:11 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,27 +131,26 @@ typedef struct s_col_state
 
 typedef struct s_column_params
 {
-    int     col;
-    int     y0;
-    int     y1;
-    t_point hit;
-    double  ray_angle;
-}   t_column_params;
+	int			col;
+	int			y0;
+	int			y1;
+	t_point		hit;
+	double		ray_angle;
+}				t_column_params;
 
 typedef struct s_tex_params
 {
-    t_data  *data;
-    t_point  hit;
-    double   ray_dir_x;
-    double   ray_dir_y;
-    int      vertical;
-    int      tex_x_val;
-    t_face   face_val;
-    int     *tex_x;
-    t_face  *face;
-    t_img   *tex;
-} t_tex_params;
-
+	t_data		*data;
+	t_point		hit;
+	double		ray_dir_x;
+	double		ray_dir_y;
+	int			vertical;
+	int			tex_x_val;
+	t_face		face_val;
+	int			*tex_x;
+	t_face		*face;
+	t_img		*tex;
+}				t_tex_params;
 
 // collisions
 int				col_squaresquare(t_rect rect, t_rect rect2);
@@ -188,10 +187,11 @@ int				is_vertical_hit_eps(t_point hit, double ray_dir_x,
 double			ft_d_r(double degrees);
 
 //checker
-int	check_coords(t_data *data, t_point *point, char coor,
-		char post_coor);
-int	check_floor_ceiling(t_data *data, t_point *point, char c, int i);
-int	coma_case(t_data *data, t_point *point, int len, int i);
+int				check_coords(t_data *data, t_point *point, char coor,
+					char post_coor);
+int				check_floor_ceiling(t_data *data, t_point *point, char c,
+					int i);
+int				coma_case(t_data *data, t_point *point, int len, int i);
 
 // parse_file
 int				set_player(t_data *data, int i);

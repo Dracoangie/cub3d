@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:37:49 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/02 13:04:08 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 18:22:23 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	check_map(t_data *data)
 
 	i = 0;
 	j = 0;
-	size = (ft_strlen(data->map.map[i]) - 1);
 	while (data->map.map[i])
 	{
+		size = (ft_strlen(data->map.map[i]) - 1);
 		j = 0;
 		while (data->map.map[i][j])
 		{

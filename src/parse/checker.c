@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 14:39:16 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/02 12:44:01 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 18:44:26 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static int	check_color(char *line, int *idx, int *out, char end)
 		len++;
 		(*idx)++;
 	}
+	if (!len)
+		return (0);
 	tmp = ft_substr(line, start, len);
 	if (!tmp)
 		return (0);
@@ -86,7 +88,7 @@ int	check_floor_ceiling(t_data *data, t_point *point, char c, int i)
 	if (!line)
 		return (0);
 	if (line[0] != c || line[1] != ' ')
-		return (1);
+		return (0);
 	point->y = 1;
 	if (!check_rgb(data, point, i))
 		return (0);

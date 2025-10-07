@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 12:57:10 by angnavar          #+#    #+#             */
-/*   Updated: 2025/10/02 12:59:04 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:41:20 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int	set_player_rotation(t_data *data, int i, int j)
 int	set_player(t_data *data, int i)
 {
 	int	j;
-	int	hasOne;
+	int	has_one;
 
 	j = 0;
-	hasOne = 0;
+	has_one = 0;
 	while (data->map.map[i][j])
 	{
 		if (data->map.map[i][j] == 'N' || data->map.map[i][j] == 'S'
@@ -41,11 +41,11 @@ int	set_player(t_data *data, int i)
 			data->map.map[i][j] = '0';
 			data->player.x = j * 20;
 			data->player.y = i * 20;
-			hasOne++;
+			has_one++;
 		}
 		j++;
 	}
-	return (hasOne);
+	return (has_one);
 }
 
 void	player_move(t_data *data, int dir, int spd)

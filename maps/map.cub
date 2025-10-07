@@ -1,7 +1,13 @@
-N ./pared.xpm
-S ./log.xpm
-WE ./stone.xpm
-EA ./wood.xpm
+N         ./textures/pared.xpm
+S ./textures/log.xpm
+WE ./textures/stone.xpm
+
+
+
+
+
+
+EA ./textures/wood.xpm
 
 F 200, 100, 0
 C 100, 34, 0

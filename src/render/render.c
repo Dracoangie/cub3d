@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:40:47 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/06 18:15:35 by angnavar         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:40:20 by angnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ void	render_2d_aux(t_data *data, t_point cords, t_point angle,
 	if (data->map.map[cords.y][cords.x] == '1')
 	{
 		if (col_squareline((t_rect){cords.x * 20, cords.y * 20, 20, 20, RED},
-				(t_line){(t_point){data->player.x
-				+ data->player.scale, data->player.y
-				+ data->player.scale}, angle},
-				&intersection, data))
+			(t_line){(t_point){data->player.x
+			+ data->player.scale, data->player.y
+			+ data->player.scale}, angle},
+			&intersection,
+			data))
 		{
-			intersectiondist = pow(intersection.x - data->player.x,
-					2) + pow(intersection.y - data->player.y, 2);
+			intersectiondist = pow(intersection.x - data->player.x, 2)
+				+ pow(intersection.y - data->player.y, 2);
 			auxdist = pow(intersectionaux->x - data->player.x, 2)
 				+ pow(intersectionaux->y - data->player.y, 2);
 			if (intersectiondist < auxdist)
@@ -38,18 +39,20 @@ void	render_2d_aux(t_data *data, t_point cords, t_point angle,
 	}
 }
 
-double	render_2d_aux_2(double	auxangle, int i, t_data *data,
+double	render_2d_aux_2(double auxangle, int i, t_data *data,
 		t_point *intersectionaux)
 {
-	t_point angle_point;
-	t_point x_y;
+	t_point	angle_point;
+	t_point	x_y;
 	double	angle;
 
 	x_y.x = 0;
 	x_y.y = 0;
 	angle = ((ft_d_r(60) * i) / WIDTH) + auxangle;
-	angle_point.x = (int)(sin(angle) * WIDTH) + data->player.x + data->player.scale;
-	angle_point.y = (int)(cos(angle) * WIDTH) + data->player.y + data->player.scale;
+	angle_point.x = (int)(sin(angle) * WIDTH) + data->player.x
+		+ data->player.scale;
+	angle_point.y = (int)(cos(angle) * WIDTH) + data->player.y
+		+ data->player.scale;
 	*intersectionaux = (t_point){angle_point.x, angle_point.y};
 	while (data->map.map[x_y.y])
 	{
@@ -119,7 +122,7 @@ void	draw(t_data *data)
 	int		aux_b;
 
 	tile_px_d = floor(fmin(200 / (double)data->map.cols,
-							200 / (double)data->map.rows));
+				200 / (double)data->map.rows));
 	if (tile_px_d < 1.0)
 		tile_px_d = 1.0;
 	world_w = data->map.cols * TILE;
