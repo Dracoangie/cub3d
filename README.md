@@ -1,4 +1,4 @@
-# cub3D
+<h1 align="center">cub3D</h1>
 
 <p align="center">
     <img src="https://img.shields.io/badge/Language-C-blue?style=for-the-badge">
