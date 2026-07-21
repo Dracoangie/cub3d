@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:45:51 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/07 18:54:10 by angnavar         ###   ########.fr       */
+/*   Updated: 2026/07/21 18:05:26 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,17 @@ int	clean_matrix(t_data *data, int i)
 	if (has_one != 1)
 		return (data->map.map[j] = NULL, 0);
 	return (data->map.map[j] = NULL, 1);
+}
+int	has_cub_extension(const char *filename)
+{
+	size_t	len;
+
+	if (!filename)
+		return (0);
+	len = ft_strlen(filename);
+	if (len <= 4)
+		return (0);
+	return (ft_strncmp(filename + len - 4, ".cub", 4) == 0);
 }
 
 int	read_file(t_data *data, char *name)

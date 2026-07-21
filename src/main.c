@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:25:12 by kpineda-          #+#    #+#             */
-/*   Updated: 2025/10/06 18:47:17 by angnavar         ###   ########.fr       */
+/*   Updated: 2026/07/21 18:04:16 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	if (ac != 2)
+		return (write(2, "Error\n", 7), 1);
+	if (!has_cub_extension(av[1]))
 		return (write(2, "Error\n", 7), 1);
 	init_data(&data, av);
 	draw(&data);

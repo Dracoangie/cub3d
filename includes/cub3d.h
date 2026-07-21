@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: angnavar <angnavar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kpineda- <kpineda-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:56:31 by angnavar          #+#    #+#             */
-/*   Updated: 2025/10/07 17:48:11 by angnavar         ###   ########.fr       */
+/*   Updated: 2026/07/21 18:05:18 by kpineda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ int				set_map(t_data *data);
 int				parse_file_textures(t_data *data);
 int				clean_matrix(t_data *data, int i);
 int				parse_coords(t_data *data);
+int				has_cub_extension(const char *filename);
 
 // parse map
 int				check_around(int i, int j, t_data *data);
