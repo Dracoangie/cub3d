@@ -44,19 +44,16 @@ The project implements a complete first-person 3D renderer using the **raycastin
 
 ```
 .
-├── include/
+├── includes/
 ├── src/
-│   ├── parsing/
-│   ├── rendering/
-│   ├── player/
-│   ├── raycasting/
-│   ├── utils/
-│   └── main.c
+│   ├── parse/
+│   └── render/
 ├── textures/
 ├── maps/
-├── libft/
+├── LICENSE
 ├── Makefile
-└── README.md
+├── README.md
+└── cub3D
 ```
 
 ---
