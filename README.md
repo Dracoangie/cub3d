@@ -5,6 +5,7 @@
     <img src="https://img.shields.io/badge/School-42-black?style=for-the-badge">
     <img src="https://img.shields.io/badge/Graphics-Raycasting-orange?style=for-the-badge">
     <img src="https://img.shields.io/badge/Norminette-Passed-success?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Grade-110-success?style=for-the-badge">
 </p>
 
 A **Wolfenstein 3D-inspired raycasting engine** developed in C as part of the 42 School curriculum.
